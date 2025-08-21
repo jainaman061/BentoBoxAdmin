@@ -1,0 +1,58 @@
+import React, { useEffect, useState } from 'react'
+import apiClient from '../../utils/apiclient'
+import Orders from "../../components/orders"
+import Restaurant from "../../components/restaurants"
+import { Navigate, useNavigate } from 'react-router-dom'
+import Navbar from "../../components/NavBar/Index"
+const Index = ({data}) => {
+    const navigate = useNavigate()
+    const [order,SetOrder]=useState([])
+    const [restaurant,Setrestaurant]=useState([])
+    const [size,SetSize]=useState([])
+      useEffect(() => {
+        if (!localStorage.getItem("bentoAdmin")) {
+          navigate(`/login`);
+        }
+      },[] );
+    useEffect(()=>{
+
+
+        const fetchData=async()=>{
+            try{
+                const response = await apiClient.get ("/restaurant");
+                const orders=await apiClient.get("/gettodayorders")
+                SetOrder(orders.data);
+
+                Setrestaurant(response.data);
+                
+            }
+            catch (err) {
+        console.error("Something went wrong",err);
+      }
+        }
+        fetchData();
+    },[])
+  return (<div>
+    <Navbar />
+    <div className='justify-center  items-center text-center w-screen'>
+    
+    <h1 className='text-3xl  mt-7 -mb-7'>Orders for today: {order.length}</h1>
+    <div className="flex justify-center mt-4">
+  <Orders data={order} />
+</div>
+    <h1 className='text-3xl mt-9 -mb-7'>All restaurants</h1>
+    
+<div className="flex justify-center mt-4">
+  <Restaurant data={restaurant} />
+</div>
+
+<div>
+    <h1 className=' py-2 text-2xl  text-blue-950  hover:text-black hover:cursor-pointer' onClick={()=>{navigate('/unAuthorizedRiders')}}>View UnAuthorized Riders</h1>
+    <h1 className='py-2 text-blue-950 text-2xl hover:text-black hover:cursor-pointer' onClick={()=> {navigate('/unAuthorizedChefs')}}>View UnAuthorized Chef</h1>
+</div>
+</div>
+  </div>
+  )
+}
+
+export default Index
