@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Cards from "./DashBoardsCards"
 import axios from 'axios'
+import apiClient from '../../utils/apiclient'
 
 const Dashboard = () => {
 const [count,SetCount]=useState([])
   useEffect(()=>{
     const count=async()=>{
       try{
-        const data=await axios.get("http://localhost:8080/admin/getCounts");
+        const data=await apiClient.get("/getCounts");
         SetCount(data.data)
       }
       catch(e){
-        console.error(e);
+        console.error(e); 
       }
 
     }
@@ -22,7 +23,7 @@ const [count,SetCount]=useState([])
     "values":"1"
   })
   return (
-    <div className='min-h-screen'>
+    <div className=''>
       <div>
         DashBoard
       </div>

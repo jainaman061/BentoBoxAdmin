@@ -1,14 +1,16 @@
 import React from 'react'
 import Navbar from "../../components/NavBar/Index"
 import Home from "../../components/Home/index"
-const index = () => {
+import { useParams } from 'react-router-dom'
+const Index = () => {
+  const {types} = useParams()
   return (
     <div className='bg-white  h-screen flex flex-col'>
      <Navbar />
    
-      <Home />
+      <Home type={types}  />
 </div>  
   )
 }
 
-export default index
+export default Index

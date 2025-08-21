@@ -20,7 +20,67 @@ const Index = () => {
 
   return (
     <div className='relative flex justify-between   bg-white'>
-      {(sidepanel)?<div className='absolute w-2/12 bg-gray-300 h-screen'>
+      {(sidepanel)?<div className='absolute w-2/12 bg-gray-300 h-screen pt-16 pl-3 '>
+          
+          <a className='text-black  text-md pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/PendingSubscriptionOrders')
+            SetSidepanel(!sidepanel)
+          }}>Pending Subscription Orders</a>
+          <br></br>
+          <a className='text-black text-md pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/CompletedSubscriptiOnorders')
+                        SetSidepanel(!sidepanel)
+
+          }}>Completed Subscription Orders</a>
+          <br></br>
+          <a className='text-black text-md mt-2 pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/PendingOnetimeOrders')
+                        SetSidepanel(!sidepanel)
+
+          }}>Pending One Time Orders</a>
+          <br></br>
+          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/CompletedOneTimeOrders')
+                        SetSidepanel(!sidepanel)
+
+          }}>Completed One Time Orders</a>
+          <br></br>
+          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/ActiveSubscriptons')
+                        SetSidepanel(!sidepanel)
+
+
+          }}>Active Subscription </a>
+          <br></br>
+          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/CompletedSubscriptons')
+                        SetSidepanel(!sidepanel)
+
+          }}>Completed Subscriptions </a>
+          <br></br>
+          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/AllUsers')
+                        SetSidepanel(!sidepanel)
+
+          }}>All Users </a>
+          <br></br>
+          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/AllRestaurants')
+                        SetSidepanel(!sidepanel)
+
+          }}>All Restaurants</a>
+           <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/unAuthorizedChefs')
+                        SetSidepanel(!sidepanel)
+
+          }}>view unAuthorized Chefs</a>
+          <br />
+           <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+            navigate('/unAuthorizedRiders')
+                        SetSidepanel(!sidepanel)
+
+          }}>view unAuthorized Riders</a>
+
 
       </div>:""}
       <div className={`flex flex-col mt-4 w-screen ${sidepanel?"ml-80":"ml-6"} `}>
