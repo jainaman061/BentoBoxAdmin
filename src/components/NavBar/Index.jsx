@@ -19,8 +19,8 @@ const Index = () => {
     }
 
   return (
-    <div className='relative flex justify-between   bg-gray-300'>
-      {(sidepanel)?<div className='absolute w-2/12 bg-white h-screen'>
+    <div className='relative flex justify-between   bg-white'>
+      {(sidepanel)?<div className='absolute w-2/12 bg-gray-300 h-screen'>
 
       </div>:""}
       <div className={`flex flex-col mt-4 w-screen ${sidepanel?"ml-80":"ml-6"} `}>
