@@ -5,7 +5,7 @@ import Home from "./Pages/HomePage/index"
 import RestaurantPage from "./Pages/RestaurantDetails/index"
 import UnAuthorizedRiders from "./Pages/UnAuthorizedRider/Index"
 import UnAuthorizedChefs from "./Pages/UnAuthorizedChef/Index"
-import TablesOnHome from "./components/TableHomeScreen/Index"
+import Userdetails from "./Pages/UserDetails/index"
 const App = () => {
   return (
        <BrowserRouter>
@@ -16,6 +16,7 @@ const App = () => {
   <Route path='/unAuthorizedRiders' element={<UnAuthorizedRiders/>}/>
   <Route path='/unAuthorizedChefs' element={<UnAuthorizedChefs/>}/>
    <Route path='/:types' element={<Home/>} />
+   <Route path="/userDetails/:number" element={<Userdetails />}/>
 
 </Routes>
 </BrowserRouter>

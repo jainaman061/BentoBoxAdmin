@@ -2,14 +2,18 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import apiClient from '../../../utils/apiclient';
 
-const ActiveSubscriptions = () => {
+const ActiveSubscriptions = (route) => {
+ 
       const [data, setData] = useState([]);
+      console.log(route);
+       const [search,Setsearch]=useState("")
+      
     
       useEffect(() => {
         const tableData = async () => {
           try {
             const response = await apiClient.get(
-              "/Activesubscriptions"
+              `${route.route}`
             );
             setData(response.data);
             console.log(response.data);
@@ -20,8 +24,26 @@ const ActiveSubscriptions = () => {
         };
         tableData();
       }, []);
+      const filteredData = data.filter((el) => {
+    if (search.trim() === "") {
+      return true; 
+    }
+    return (
+      el.name?.toLowerCase().includes(search.toLowerCase()) || 
+      el.number?.toString().includes(search) ||
+      el.email?.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+    const handlechange=(e)=>{
+        const value=e.target.value;
+        Setsearch(value);
+        console.log(value)
+    }
   return (
-    <div className='overflow-x-hidden overflow-y-auto h-96 w-full '>
+    <div>
+          <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
+
+      <div className='overflow-x-hidden overflow-y-auto h-96 w-full '>
       <table className='border-4    border-gray-300 mt-8'>
       <tr>
         <th className=''>
@@ -70,6 +92,7 @@ const ActiveSubscriptions = () => {
      </table>
       
 
+    </div>
     </div>  )
 }
 

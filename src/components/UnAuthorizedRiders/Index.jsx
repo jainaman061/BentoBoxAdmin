@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { href, useNavigate } from 'react-router-dom'
 import apiClient from '../../utils/apiclient';
 const Index = ({data}) => {
     console.log(data)
+     const [search,Setsearch]=useState("")
+
     const navigate=useNavigate();
     const approveRestaurant=async(id)=>{
             try{
@@ -17,7 +19,24 @@ const Index = ({data}) => {
         console.error("Something went wrong",err);
       }
         }
+        const filteredData = data.filter((el) => {
+    if (search.trim() === "") {
+      return true; 
+    }
     return (
+      el.name?.toLowerCase().includes(search.toLowerCase()) || 
+      el.number?.toString().includes(search) ||
+      el.email?.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+    const handlechange=(e)=>{
+        const value=e.target.value;
+        Setsearch(value);
+        console.log(value)
+    }
+    return (
+      <div>        <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
+
     <div>
            <table className='border-4   border-blue-700 mt-8'>
       <tr>
@@ -35,7 +54,7 @@ const Index = ({data}) => {
         
       </tr>
         {
-          data.map((data,index)=>(
+          filteredData.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-sky-600 hover:text-blue-900 hover:cursor-pointer'>
               <td className='text-center'>{data.id}</td>
@@ -54,7 +73,7 @@ const Index = ({data}) => {
           ))
         }
      </table>
-    </div>
+    </div></div>
   )
 }
 

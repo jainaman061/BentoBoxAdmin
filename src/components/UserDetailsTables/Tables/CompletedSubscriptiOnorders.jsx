@@ -3,17 +3,16 @@ import React, { useEffect, useState } from 'react'
 import apiClient from '../../../utils/apiclient'
 import { useNavigate } from 'react-router-dom'
 
-const CompletedSubscriptiOnorders = (route) => {
+const CompletedSubscriptiOnorders = (content) => {
+  console.log(content.data);
+  
   const navigate = useNavigate()
         const [data,Setdata]=useState([])
- const [search,Setsearch]=useState("")
 
   useEffect(()=>{
       const tableData=async()=>{
         try{
-          const data=await apiClient.get( `${route.route}`);
-          console.log(data.data);
-          Setdata(data.data);
+          Setdata(content.data);
           
         }
         catch(e){
@@ -22,24 +21,7 @@ const CompletedSubscriptiOnorders = (route) => {
   
       }
 tableData()    },[])
-const filteredData = data.filter((el) => {
-    if (search.trim() === "") {
-      return true; 
-    }
-    return (
-      el.name?.toLowerCase().includes(search.toLowerCase()) || 
-      el.number?.toString().includes(search) ||
-      el.email?.toLowerCase().includes(search.toLowerCase())
-    );
-  });
-    const handlechange=(e)=>{
-        const value=e.target.value;
-        Setsearch(value);
-        console.log(value)
-    }
-  return (<div>
-            <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
-
+  return (
     <div className=" overflow-y-auto h-96 w-full">
     <table className='border-4    border-gray-300 mt-8'>
       <tr>
@@ -60,7 +42,7 @@ const filteredData = data.filter((el) => {
 
       </tr>
         {
-          filteredData.map((data,index)=>(
+          data.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
               <td className='text-center'>{data.id}</td>
@@ -77,7 +59,6 @@ const filteredData = data.filter((el) => {
           ))
         }
      </table> </div>
-     </div>
   )
 }
 

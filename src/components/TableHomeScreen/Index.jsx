@@ -15,28 +15,28 @@ const Index = (data) => {
    useEffect(()=>{
         switch (type){
         case "PendingSubscriptionOrders":
-            SetTableType(<PendingSubscriptionOrders />)
+            SetTableType(<PendingSubscriptionOrders route={"/pendingSubscriptionorders"} />)
             break
         case "CompletedSubscriptiOnorders":
-            SetTableType(<CompletedSubscriptiOnorders />)
+            SetTableType(<CompletedSubscriptiOnorders route={"/completedSubscriptionorders"}/>)
             break
         case "PendingOnetimeOrders":
-            SetTableType(<PendingOnetimeOrders />)
+            SetTableType(<PendingOnetimeOrders route={"/pendingOneTimeorders"} />)
             break
         case "CompletedOneTimeOrders":
-            SetTableType(<CompletedOneTimeOrders />)
+            SetTableType(<CompletedOneTimeOrders route={"/completedOneTimeorders"} />)
             break
         case "ActiveSubscriptons":
-            SetTableType(<ActiveSubscriptons />)
+            SetTableType(<ActiveSubscriptons route={"/Activesubscriptions"}/>)
             break
         case "CompletedSubscriptons":
-            SetTableType(<CompletedSubscriptons />)
+            SetTableType(<CompletedSubscriptons route={"/CompletedSubscription"} />)
             break
        case "AllRestaurants":
-            SetTableType(<Restaurantdata />)
+            SetTableType(<Restaurantdata route={"/restaurant"} />)
             break
         case "AllUsers":
-            SetTableType(<AllUsers />)
+            SetTableType(<AllUsers route={"/AllUsers"} />)
             break
 
     }

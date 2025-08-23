@@ -20,66 +20,66 @@ const Index = () => {
 
   return (
     <div className='relative flex justify-between   bg-white'>
-      {(sidepanel)?<div className='absolute w-2/12 bg-gray-300 h-screen pt-16 pl-3 '>
-          
-          <a className='text-black  text-md pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+      
+      {(sidepanel)?<div className='absolute w-1/5 bg-gray-300 h-screen flex flex-col pt-12 pl-2'>
+      
+        
+        <ol className="list-disc marker:text-xl marker:font-bold p-4 ml-6">
+  
+
+          <li><a className='text-black  text-md  hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/PendingSubscriptionOrders')
             SetSidepanel(!sidepanel)
-          }}>Pending Subscription Orders</a>
-          <br></br>
-          <a className='text-black text-md pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Pending Subscription Orders</a></li>
+          
+         <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/CompletedSubscriptiOnorders')
                         SetSidepanel(!sidepanel)
 
-          }}>Completed Subscription Orders</a>
-          <br></br>
-          <a className='text-black text-md mt-2 pt-6 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Completed Subscription Orders</a></li>
+        <li>  <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/PendingOnetimeOrders')
                         SetSidepanel(!sidepanel)
 
-          }}>Pending One Time Orders</a>
-          <br></br>
-          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Pending One Time Orders</a></li>
+          <li><a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/CompletedOneTimeOrders')
                         SetSidepanel(!sidepanel)
 
-          }}>Completed One Time Orders</a>
-          <br></br>
-          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Completed One Time Orders</a></li>
+        <li>  <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/ActiveSubscriptons')
                         SetSidepanel(!sidepanel)
 
 
-          }}>Active Subscription </a>
-          <br></br>
-          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Active Subscription </a></li>
+         <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/CompletedSubscriptons')
                         SetSidepanel(!sidepanel)
 
-          }}>Completed Subscriptions </a>
-          <br></br>
-          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>Completed Subscriptions </a></li>
+         <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/AllUsers')
                         SetSidepanel(!sidepanel)
 
-          }}>All Users </a>
-          <br></br>
-          <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>All Users </a></li>
+        <li>  <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/AllRestaurants')
                         SetSidepanel(!sidepanel)
 
-          }}>All Restaurants</a>
-           <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+          }}>All Restaurants</a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/unAuthorizedChefs')
                         SetSidepanel(!sidepanel)
 
           }}>view unAuthorized Chefs</a>
-          <br />
-           <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer ' onClick={()=>{
+</li>
+                    <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/unAuthorizedRiders')
                         SetSidepanel(!sidepanel)
 
-          }}>view unAuthorized Riders</a>
+          }}>view unAuthorized Riders</a></li>
+        </ol>  
 
 
       </div>:""}

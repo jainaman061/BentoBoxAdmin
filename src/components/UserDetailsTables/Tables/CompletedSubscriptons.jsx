@@ -2,16 +2,16 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import apiClient from '../../../utils/apiclient';
 
-const CompletedSubscriptons = (route) => {
+const CompletedSubscriptons = (content) => {
     const [data, setData] = useState([]);
+    console.log(content.data);
+    
     
       useEffect(() => {
         const tableData = async () => {
           try {
-            const response = await apiClient.get(
- `${route.route}`            );
-            setData(response.data);
-            console.log(response.data);
+           
+            setData(content.data);
             
           } catch (e) {
             console.error(e);

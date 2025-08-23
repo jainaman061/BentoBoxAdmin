@@ -3,19 +3,16 @@ import React, { useEffect, useState } from 'react'
 import apiClient from '../../../utils/apiclient'
 import { useNavigate } from 'react-router-dom'
 
-const PendingOnetimeOrders = (route) => {
-  console.log(route.route);
-   const [search,Setsearch]=useState("")
-
+const PendingOnetimeOrders = (content) => {
+  
   const navigate=useNavigate()
             const [data,Setdata]=useState([])
     
       useEffect(()=>{
           const tableData=async()=>{
             try{
-              const data=await apiClient.get( `${route.route}`);
-              console.log(data.data);
-              Setdata(data.data);
+           
+              Setdata(content.data);
               
             }
             catch(e){
@@ -24,24 +21,7 @@ const PendingOnetimeOrders = (route) => {
       
           }
     tableData()    },[])
-    const filteredData = data.filter((el) => {
-    if (search.trim() === "") {
-      return true; 
-    }
-    return (
-      el.name?.toLowerCase().includes(search.toLowerCase()) || 
-      el.number?.toString().includes(search) ||
-      el.email?.toLowerCase().includes(search.toLowerCase())
-    );
-  });
-    const handlechange=(e)=>{
-        const value=e.target.value;
-        Setsearch(value);
-        console.log(value)
-    }
-  return ( <div>
-            <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
-<div className=" overflow-y-auto h-96 w-full">
+  return ( <div className=" overflow-y-auto h-96 w-full">
 <table className='border-4    border-gray-300 mt-8 w-full'>
       <tr>
         <th className='px-5'>
@@ -53,12 +33,11 @@ const PendingOnetimeOrders = (route) => {
         <th className='px-5'>orderStatus</th>
         <th className='px-5'>Customer number</th>
         <th className='px-5'>Restaurant Name</th>
-        <th className='px-5'>Order date</th>
 
       </tr>
 
         {
-          filteredData.map((data,index)=>(
+          data.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
               <td className='text-center'>{data.id}</td>
@@ -73,12 +52,10 @@ const PendingOnetimeOrders = (route) => {
               <td className='text-center'>{data.orderStatus}</td>
               <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
               <td className='text-center'>{data.restaurantName}</td>
-              <td className='text-center'>{data.orderdate}</td>
             </tr>
           ))
         }
-     </table> </div>  
-    </div>)
+     </table> </div>  )
 }
 
 export default PendingOnetimeOrders
