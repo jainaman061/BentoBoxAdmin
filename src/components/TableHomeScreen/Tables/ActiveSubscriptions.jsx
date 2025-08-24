@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import apiClient from '../../../utils/apiclient';
+import { useNavigate } from 'react-router-dom';
 
 const ActiveSubscriptions = (route) => {
- 
+  const navigate = useNavigate()
       const [data, setData] = useState([]);
       console.log(route);
        const [search,Setsearch]=useState("")
@@ -45,6 +46,7 @@ const ActiveSubscriptions = (route) => {
 
       <div className='overflow-x-hidden overflow-y-auto h-96 w-full '>
       <table className='border-4    border-gray-300 mt-8'>
+        <thead>
       <tr>
         <th className=''>
           Subscription Id
@@ -67,13 +69,15 @@ const ActiveSubscriptions = (route) => {
 
 
       </tr>
+      </thead>
+      <tbody>
         {
           data.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
               <td className='text-center'>{data.id}</td>
               <td className='text-center'>{data.mealPLanName}</td>
-              <td className='text-center'>{data.restaurantName}</td>
+              <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/restaurant/${data.restaurantid}`)}}>{data.restaurantName}</td>
 
               <td className='text-center'>{data.isActive ? "Active":"Not Active"}</td>
              
@@ -89,6 +93,7 @@ const ActiveSubscriptions = (route) => {
             </tr>
           ))
         }
+        </tbody>
      </table>
       
 

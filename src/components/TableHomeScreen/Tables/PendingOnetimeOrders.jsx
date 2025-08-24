@@ -42,42 +42,55 @@ const PendingOnetimeOrders = (route) => {
   return ( <div>
             <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
 <div className=" overflow-y-auto h-96 w-full">
-<table className='border-4    border-gray-300 mt-8 w-full'>
-      <tr>
-        <th className='px-5'>
-          Order Id
-        </th>
-        <th className='px-5' >chefId</th>
-        <th className='px-18'>items</th>
-        <th className='px-5'>price</th>
-        <th className='px-5'>orderStatus</th>
-        <th className='px-5'>Customer number</th>
-        <th className='px-5'>Restaurant Name</th>
-        <th className='px-5'>Order date</th>
-
+<table className="border-4 border-gray-300 mt-8 w-full">
+  <thead>
+    <tr>
+      <th className="px-5">Order Id</th>
+      <th className="px-5">chefId</th>
+      <th className="px-18">items</th>
+      <th className="px-5">price</th>
+      <th className="px-5">orderStatus</th>
+      <th className="px-5">Customer number</th>
+      <th className="px-5">Restaurant Name</th>
+      <th className="px-5">Order date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredData.map((data, index) => (
+      <tr key={index} className="items-center justify-center border border-gray-300">
+        <td className="text-center">{data.id}</td>
+        <td className="text-center">{data.chefid}</td>
+        <td className="flex flex-col justify-center text-center items-center">
+          {data.orderItems.map((orderItems, idx) => (
+            <div key={idx} className="flex">
+              <div className="flex">
+                <span>{orderItems.name}</span>x
+                <span>{orderItems.count}</span>
+              </div>
+              = <span>{orderItems.price}</span>
+            </div>
+          ))}
+        </td>
+        <td className="text-center">{data.price}</td>
+        <td className="text-center">{data.orderStatus}</td>
+        <td
+          className="text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline"
+          onClick={() => navigate(`/userDetails/${data.number}`)}
+        >
+          {data.number}
+        </td>
+        <td
+          className="text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline"
+          onClick={() => navigate(`/restaurant/${data.restaurantid}`)}
+        >
+          {data.restaurantName}
+        </td>
+        <td className="text-center">{data.orderdate}</td>
       </tr>
-
-        {
-          filteredData.map((data,index)=>(
-        
-            <tr key={index} className='items-center justify-center border border-gray-300'>
-              <td className='text-center'>{data.id}</td>
-              <td className='text-center'>{data.chefid}</td>
-              <td  className='flex flex-col justify-center text-center items-center '>{data.orderItems.map((orderItems,idx)=>(
-                <tr key={idx} className='flex '><div className='flex'><td className=''>{orderItems.name}</td>x
-                <td className=''>{orderItems.count}</td></div>=
-                <td className=''>{orderItems.price}</td></tr>
-              
-              ))}</td>
-              <td className='text-center '>{data.price}</td>
-              <td className='text-center'>{data.orderStatus}</td>
-              <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
-              <td className='text-center'>{data.restaurantName}</td>
-              <td className='text-center'>{data.orderdate}</td>
-            </tr>
-          ))
-        }
-     </table> </div>  
+    ))}
+  </tbody>
+</table>
+</div>  
     </div>)
 }
 

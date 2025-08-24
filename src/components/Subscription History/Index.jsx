@@ -15,8 +15,8 @@ const Index = ({data}) => {
         <th className='px-5' >Cancellation Date</th>
      
         <th className='px-5'>start date</th>
-        <th className='px-5'>start date</th>
-      
+        <th className='px-5'>end date</th>
+        
 
         <th className='px-5'>price</th>
         <th className='px-5'>refund amount</th>

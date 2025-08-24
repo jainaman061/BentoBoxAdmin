@@ -42,6 +42,7 @@ const filteredData = data.filter((el) => {
 
     <div className=" overflow-y-auto h-96 w-full">
     <table className='border-4    border-gray-300 mt-8'>
+      <thead>
       <tr>
         <th className='px-5'>
           SubscriptionOrder Id
@@ -59,6 +60,7 @@ const filteredData = data.filter((el) => {
 
 
       </tr>
+      </thead><tbody>
         {
           filteredData.map((data,index)=>(
         
@@ -66,7 +68,7 @@ const filteredData = data.filter((el) => {
               <td className='text-center'>{data.id}</td>
               <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
               <td className='text-center'>{data.mealName}</td>
-              <td className='text-center'>{data.restaurantName}</td>
+              <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline'onClick={()=>{navigate(`/restaurant/${data.restaurantid}`)}} >{data.restaurantName}</td>
               <td className='text-center'>{data.status}</td>
               <td className='text-center'>{data.startTime}</td>
               <td className='text-center'>{data.endTime}</td>
@@ -75,7 +77,7 @@ const filteredData = data.filter((el) => {
               <td className='text-center'>{data.mealplanname}</td>
             </tr>
           ))
-        }
+        }</tbody>
      </table> </div>
      </div>
   )

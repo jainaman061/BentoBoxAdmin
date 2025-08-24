@@ -40,6 +40,7 @@ const navigate = useNavigate()
     <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
      <div className=" overflow-y-auto max-h-96 w-full pb-4">
 <table className='border-4    border-gray-300 mt-8 w-full'>
+  <thead>
       <tr>
         <th className='px-5'>
           Customer Id
@@ -51,7 +52,8 @@ const navigate = useNavigate()
        
 
       </tr>
-
+      </thead>
+      <tbody>
         {
           filteredData.map((data,index)=>(
         
@@ -66,6 +68,7 @@ const navigate = useNavigate()
               </tr>
           ))
         }
+        </tbody>
      </table> </div> 
    </div> );
 };
