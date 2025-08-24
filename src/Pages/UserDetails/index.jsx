@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import UserDetailsTable from "../../components/UserDetailsTables/index"
+import apiClient from '../../utils/apiclient';
 const Index = () => {
     const {number} = useParams()
     console.log(number);
@@ -10,7 +11,7 @@ const Index = () => {
     useEffect(()=>{
       const fetchData=async()=>{
         try{
-            const response =await axios.get(`http://localhost:8080/admin/user/${number}`)
+            const response =await apiClient.get(`user/${number}`)
             SetData(response.data)
         }
         catch(e){
