@@ -36,7 +36,13 @@ const Index = (data) => {
             SetTableType(<Restaurantdata route={"/restaurant"} />)
             break
         case "AllUsers":
-            SetTableType(<AllUsers route={"/AllUsers"} />)
+            SetTableType(<AllUsers key="users" route={"/AllUsers"} />)
+            break
+        case "AllChef":
+            SetTableType(<AllUsers key="chefs" route={"/AllChef"} />)
+            break
+        case "AllRiders":
+            SetTableType(<AllUsers key="riders" route={"/AllRiders"} />)
             break
 
     }

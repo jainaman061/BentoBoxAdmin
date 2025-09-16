@@ -28,7 +28,11 @@ const CompletedSubscriptons = (route) => {
         <th className=''>
           Subscription Id
         </th>
-
+        <th>
+          user id
+        </th>
+        <th>
+          user number</th>
         <th className='px-5' >Meal Plan</th>
         <th className='px-5' >Restaurant Name</th>
         <th className='px-5' >Active Status</th>
@@ -55,6 +59,8 @@ const CompletedSubscriptons = (route) => {
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
               <td className='text-center'>{data.id}</td>
+               <td className='text-center '>{data.userid}</td>
+              <td className='text-center hover:text-blue-900 hover:cursor-pointer' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
               <td className='text-center'>{data.mealPLanName}</td>
               <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/restaurant/${data.restaurantid}`)}}>{data.restaurantName}</td>
 

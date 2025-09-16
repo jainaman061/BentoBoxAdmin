@@ -56,7 +56,7 @@ const Index = ({data}) => {
         {
           filteredData.map((data,index)=>(
         
-            <tr key={index} className='items-center justify-center border border-sky-600 hover:text-blue-900 hover:cursor-pointer'>
+            <tr key={index} className='items-center justify-center border border-sky-600 '>
               <td className='text-center'>{data.id}</td>
               <td className='text-center'>{data.name}</td>
               <td className='text-center' >{data.number}</td>
@@ -65,7 +65,7 @@ const Index = ({data}) => {
     rel="noopener noreferrer"
     className='text-blue-500 underline cursor-pointer'>view</a></td>
 
-              <td className='text-center' >{data.restaurantname===null?"Not yet added":data.restaurantname}</td>
+              <td className='text-center hover:text-blue-900 hover:cursor-pointer' onClick={()=>{navigate(`/restaurant/${data.restaurantid}`)}}>{data.restaurantname===null?"Not yet added":data.restaurantname}</td>
               <td className='text-center' ><button className='bg-gray-400 border rounded-lg p-1' onClick={()=>{approveRestaurant(data.id)}}>approve</button></td>
 
               

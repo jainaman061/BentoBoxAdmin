@@ -63,6 +63,16 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>All Users </a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/AllChef')
+                        SetSidepanel(!sidepanel)
+
+          }}>All Chef </a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/AllRiders')
+                        SetSidepanel(!sidepanel)
+
+          }}>All Riders </a></li>
         <li>  <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
             navigate('/AllRestaurants')
                         SetSidepanel(!sidepanel)

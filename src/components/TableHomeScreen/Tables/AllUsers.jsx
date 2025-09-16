@@ -6,7 +6,8 @@ import ReactSearchBox from "react-search-box";
 
 const AllUsers = (route) => {
  const [data, setData] = useState([]);
- const [search,Setsearch]=useState("")
+ const [search,Setsearch]=useState("");
+ const [isloading,SetIsLoading]=useState(true)
 const navigate = useNavigate()
   useEffect(() => {
     const tableData = async () => {
@@ -14,12 +15,13 @@ const navigate = useNavigate()
         const response = await apiClient.get(
  `${route.route}`        );
         setData(response.data);
+        SetIsLoading(false);
       } catch (e) {
         console.error(e);
       }
     };
     tableData();
-  }, []);
+  }, [route.route]);
    const filteredData = data.filter((el) => {
     if (search.trim() === "") {
       return true; 
@@ -54,7 +56,7 @@ const navigate = useNavigate()
       </tr>
       </thead>
       <tbody>
-        {
+        {isloading?"Loading...":(
           filteredData.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
@@ -67,7 +69,7 @@ const navigate = useNavigate()
 
               </tr>
           ))
-        }
+  )}
         </tbody>
      </table> </div> 
    </div> );
