@@ -1,12 +1,14 @@
 import React from 'react'
-import {Route,Routes,BrowserRouter} from "react-router-dom"
+import {Route,Routes,BrowserRouter, useNavigate} from "react-router-dom"
 import Login from "./Pages/LoginPage/index"
 import Home from "./Pages/HomePage/index"
 import RestaurantPage from "./Pages/RestaurantDetails/index"
 import UnAuthorizedRiders from "./Pages/UnAuthorizedRider/Index"
 import UnAuthorizedChefs from "./Pages/UnAuthorizedChef/Index"
 import Userdetails from "./Pages/UserDetails/index"
+import WeekMealNotAdded from "./Pages/WeekMealNotAdded/index"
 const App = () => {
+ 
   return (
        <BrowserRouter>
 <Routes>
@@ -17,6 +19,8 @@ const App = () => {
   <Route path='/unAuthorizedChefs' element={<UnAuthorizedChefs/>}/>
    <Route path='/:types' element={<Home/>} />
    <Route path="/userDetails/:number" element={<Userdetails />}/>
+   <Route path='/weekmealnotadded' element={<WeekMealNotAdded />} />
+
 
 </Routes>
 </BrowserRouter>

@@ -49,7 +49,7 @@ const navigate = useNavigate()
         </th>
 
         <th className='px-5' >name</th>
-        <th className='px-18'>namber</th>
+        <th className='px-18'>number</th>
         <th className='px-5'>email</th>
        
 

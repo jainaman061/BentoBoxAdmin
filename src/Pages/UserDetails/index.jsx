@@ -1,9 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import UserDetailsTable from "../../components/UserDetailsTables/index"
 import apiClient from '../../utils/apiclient';
 const Index = () => {
+  const navigate=useNavigate()
+   useEffect(() => {
+      if (!localStorage.getItem("bentoAdmin")) {
+        navigate("/login")
+      }
+    }, [navigate])
+  
     const {number} = useParams()
     console.log(number);
 

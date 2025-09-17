@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../../images/favicon.png"
+import Bentologo from "../../images/favicon.png"
 import { useNavigate } from 'react-router-dom'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from 'react';
@@ -89,12 +89,17 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>view unAuthorized Riders</a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/weekmealnotadded')
+                        SetSidepanel(!sidepanel)
+
+          }}>Week meal not added</a></li>
         </ol>  
 
 
       </div>:""}
       <div className={`flex flex-col mt-4 w-screen ${sidepanel?"ml-80":"ml-6"} `}>
-        <div className='flex'><img src={logo} alt='logo' className='w-11 -ml-3' />
+        <div className='flex'><img src={Bentologo}  alt='logo' className='w-11 -ml-3' />
       <h1 className='mt-2'>Bento Box Admin Portal</h1></div>
       <div >
         {sidepanel?<ImCross onClick={()=>{toggleSidepanel()}} className={`text-red-600 mt-4 text-2xl hover:cursor-pointer`}/>: <RxHamburgerMenu className={`text-2xl mt-4  hover:cursor-pointer`} onClick={()=>{toggleSidepanel()}}/>
