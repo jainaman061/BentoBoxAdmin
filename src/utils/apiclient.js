@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const apiClient = axios.create({
-    baseURL: "http://localhost:8080/admin/",
+    baseURL: "https://bento-backend-849680057939.asia-south2.run.app/admin/",
     headers:{
         "Access-Control-Allow-Origin":"*",
         "Content-type":"application/json; charset=UTF-8"
