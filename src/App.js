@@ -7,6 +7,7 @@ import UnAuthorizedRiders from "./Pages/UnAuthorizedRider/Index"
 import UnAuthorizedChefs from "./Pages/UnAuthorizedChef/Index"
 import Userdetails from "./Pages/UserDetails/index"
 import WeekMealNotAdded from "./Pages/WeekMealNotAdded/index"
+import EditContainer from "./Pages/EditContainer/Index"
 const App = () => {
  
   return (
@@ -20,7 +21,7 @@ const App = () => {
    <Route path='/:types' element={<Home/>} />
    <Route path="/userDetails/:number" element={<Userdetails />}/>
    <Route path='/weekmealnotadded' element={<WeekMealNotAdded />} />
-
+    <Route path='/editContainer' element={<EditContainer />} />
 
 </Routes>
 </BrowserRouter>

@@ -94,6 +94,11 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>Week meal not added</a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/editContainer')
+                        SetSidepanel(!sidepanel)
+
+          }}>Edit Container</a></li>
         </ol>  
 
 
