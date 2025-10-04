@@ -7,7 +7,7 @@ import CompletedSubscriptons from './Tables/CompletedSubscriptons';
 import PendinOneTimeOrders from "./Tables/PendingOnetimeOrders";
 import PendingSubscription from "./Tables/ActiveSubscriptions";
 import PendingSubscriptionOrders from './Tables/PendingSubscriptionOrders';
-
+import UserDetails from './Tables/Userdetails';
 const Index = ({ data }) => {
   const table = data;
   const navigate = useNavigate();
@@ -22,6 +22,8 @@ const Index = ({ data }) => {
     "pending subscription orders": PendingSubscriptionOrders,
     "subscription": PendingSubscription,
     "subscription History": CompletedSubscriptons,
+    "user details":UserDetails
+   
   };
 
   const ActiveComponent = componentsMap[activeSession];

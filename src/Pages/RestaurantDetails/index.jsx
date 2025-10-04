@@ -77,7 +77,7 @@ const Index = () => {
 
 
         {/* <h1 className='text-3xl'>menu</h1> */}
-      {activeSession==="menu" && <Menu data={menu}/>}
+      {activeSession==="menu" && <Menu data={menu} id={id}/>}
       {/* <h1 className='text-3xl'>orders</h1> */}
       {activeSession==="orders" &&<Orders data={orders}/>}
       {/* <h1 className='text-3xl'>subscriptionsorders</h1> */}

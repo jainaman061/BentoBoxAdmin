@@ -20,6 +20,8 @@ const Index = () => {
         try{
             const response =await apiClient.get(`user/${number}`)
             SetData(response.data)
+            console.log(response.data);
+            
         }
         catch(e){
           console.error(e)
