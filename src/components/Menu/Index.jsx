@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
 import apiClient from '../../utils/apiclient';
 
-const Index = ({ data ,id}) => {
+const Index = ({ data ,id,activesessione}) => {
+  console.log(activesessione)
+  console.log(id)
   const [editingRow, setEditingRow] = useState(null);
   const [editedData, setEditedData] = useState({});
+  const [additem,setAdditem]= useState(false);
+   
+  const initialItem = {
+  name: '',
+  price: '',
+  description: '',
+  type: '',
+  chefNote: '',
+  packagingId: '',
+  image: null,
+};
+
+
+const [newItem, setNewItem] = useState(initialItem);
 
   const handleEdit = (row) => {
     setEditingRow(row.id);
     setEditedData({ ...row });
   };
+
 
   const handleCancel = () => {
     setEditingRow(null);
@@ -22,6 +39,54 @@ const Index = ({ data ,id}) => {
     }));
   };
 
+  const adddata=(field,value)=>{
+    setNewItem((prev)=>({
+      ...prev,
+      [field]:value,
+    }))
+  }
+  const handlenewsave = async () => {
+  const formData = new FormData();
+  formData.append("name", newItem.name);
+  formData.append("price", newItem.price);
+  formData.append("description", newItem.description);
+  formData.append("type", newItem.type);
+  formData.append("chefNote", newItem.chefNote);
+  formData.append("packagingId", newItem.packagingId);
+
+  if (newItem.image) {
+    formData.append("image", newItem.image);
+  }
+
+  try {
+    const response = await apiClient.post(`/additem/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    console.log(response);
+  } catch (error) {
+    console.error("Error uploading:", error);
+  }
+};
+  // const handlenewsave=async()=>{
+  //    try{
+  //       const response = await apiClient.post(
+  // `/additem/${id}`,newItem);
+      
+  //     console.log(response)
+
+  //     if (response.status===200) {
+       
+  //       setEditingRow(null);
+  //        window.location.reload()
+  //     } else {
+  //       alert("Failed to update item");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     alert("Error while saving data");
+  //   }
+  //   console.log(newItem)
+  // }
   const handleSave = async () => {
     
       console.log(editedData);
@@ -32,8 +97,9 @@ const Index = ({ data ,id}) => {
       console.log(response)
 
       if (response.status===200) {
-        alert("Item updated successfully!");
+       
         setEditingRow(null);
+         window.location.reload()
       } else {
         alert("Failed to update item");
       }
@@ -44,6 +110,32 @@ const Index = ({ data ,id}) => {
   };
 
   return (
+    <>
+    <div>
+      <button className="border-2 px-2 rounded hover:bg-gray-100" onClick={()=>setAdditem(!additem)}>Add item</button>
+    </div>
+    {additem?<div className='mt-4 flex'>
+      <input type='text' className="w-16 text-center border px-2 py-1 rounded  " placeholder='name' value={newItem.name} onChange={(e) => adddata("name", e.target.value)}/>
+      <input type='text' className="w-16 text-center border px-2 py-1 rounded" placeholder='price' value={newItem.price}onChange={(e) => adddata("price", e.target.value)}/>
+      <textarea className=" w-full h-full   text-center border px-2 py-1 rounded placeholder:text-center" value={newItem.description} placeholder='description' onChange={(e) => adddata("description", e.target.value)}/>
+      <input type='text' className="w-20 text-center border px-2 py-1 rounded" placeholder='type' value={newItem.type} onChange={(e) => adddata("type", e.target.value)}/>
+      <textarea className="w-54 text-center border px-2 py-1 rounded" placeholder='chefNote' value={newItem.chefNote} onChange={(e) => adddata("chefNote", e.target.value)}/>
+      <input type='text' className="w-14 text-center border px-2 py-1 rounded" placeholder='packagingId' value={newItem.packagingId} onChange={(e) => adddata("packagingId", e.target.value)}/>
+      <input type='file' accept='image/*' className="w-54 text-center border px-2 py-1 rounded"  onChange={(e) => adddata("image", e.target.files[0])}/>
+      <button
+      className="border-2 px-2 bg-green-500 text-white rounded mr-2"
+                    onClick={handlenewsave}
+                    >
+                      Ok
+                    </button>
+                    <button
+                      className="border-2 px-2 bg-red-500 text-white rounded"
+                      onClick={()=>setNewItem(initialItem)}
+                    >
+                      X
+                    </button>
+    </div>:""}
+    
     <table className="border-4 border-blue-700 mt-8 mx-auto">
       <thead>
         <tr>
@@ -52,6 +144,7 @@ const Index = ({ data ,id}) => {
           <th className="px-5 py-2 border">Name</th>
           <th className="px-5 py-2 border">Price</th>
           <th className="px-5 py-2 border">Type</th>
+          <th className="px-5 py-2 border">description</th>
           <th className="px-5 py-2 border">Edit</th>
         </tr>
       </thead>
@@ -63,7 +156,6 @@ const Index = ({ data ,id}) => {
                 <>
                   <td className="text-center p-2">{item.id}</td>
 
-                  {/* Availability Dropdown */}
                   <td className="text-center p-2">
                     <select
                       className="border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -77,7 +169,6 @@ const Index = ({ data ,id}) => {
                     </select>
                   </td>
 
-                  {/* Name */}
                   <td className="text-center p-2">
                     <input
                       type="text"
@@ -87,7 +178,6 @@ const Index = ({ data ,id}) => {
                     />
                   </td>
 
-                  {/* Price */}
                   <td className="text-center p-2">
                     <input
                       type="number"
@@ -97,7 +187,6 @@ const Index = ({ data ,id}) => {
                     />
                   </td>
 
-                  {/* Type Dropdown */}
                   <td className="text-center p-2">
                     <select
                       className="border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -108,7 +197,14 @@ const Index = ({ data ,id}) => {
                       <option value="Non-Veg">Non-Veg</option>
                     </select>
                   </td>
-
+                   <td className="text-center p-2">
+                    <input
+                      type="text"
+                      value={editedData.description}
+                      onChange={(e) => handleChange("description", e.target.value)}
+                      className="text-center border px-2 py-1 rounded"
+                    />
+                  </td>
                   {/* Save / Cancel Buttons */}
                   <td className="text-center p-2">
                     <button
@@ -134,6 +230,7 @@ const Index = ({ data ,id}) => {
                   <td className="text-center">{item.name}</td>
                   <td className="text-center">{item.price}</td>
                   <td className="text-center">{item.type}</td>
+                  <td className="text-center">{item.description}</td>
                   <td className="text-center">
                     <button
                       className="border-2 px-2 rounded hover:bg-gray-100"
@@ -155,6 +252,7 @@ const Index = ({ data ,id}) => {
         )}
       </tbody>
     </table>
+    </>
   );
 };
 

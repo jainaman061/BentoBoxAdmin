@@ -77,7 +77,7 @@ const Index = () => {
 
 
         {/* <h1 className='text-3xl'>menu</h1> */}
-      {activeSession==="menu" && <Menu data={menu} id={id}/>}
+      {activeSession==="menu" && <Menu data={menu} id={id} activesessione={"menu"}/>}
       {/* <h1 className='text-3xl'>orders</h1> */}
       {activeSession==="orders" &&<Orders data={orders}/>}
       {/* <h1 className='text-3xl'>subscriptionsorders</h1> */}
@@ -86,7 +86,7 @@ const Index = () => {
       {activeSession==="Subscriptions" &&<Subscription data={subscriptions} />}
       {/* <h1 className='text-3xl'>subscription History</h1> */}
       {activeSession==="SubscriptionHistory" &&<SubscriptionHistory data={subscriptionHistory} />}
-      {activeSession==="WeekMealsToday"&& <Menu data={weekmeals} />}
+      {activeSession==="WeekMealsToday"&& <Menu data={weekmeals} id={id} activesessione={"WeekMealsToday"}/>}
             {activeSession==="restaurantdetails"&& <RestaurantDetails data={restaurantdetails} />}
 
     
