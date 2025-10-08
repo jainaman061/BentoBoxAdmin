@@ -14,7 +14,7 @@ const Index = () => {
 
   return (
 
-    <div className='bg-white  h-screen flex flex-col'>
+    <div className='bg-white  h-screen flex flex-col '>
      <Navbar />
    
       <Home type={types}  />

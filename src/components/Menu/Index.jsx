@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import apiClient from '../../utils/apiclient';
 
 const Index = ({ data ,id,activesessione}) => {
@@ -7,6 +7,7 @@ const Index = ({ data ,id,activesessione}) => {
   const [editingRow, setEditingRow] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [additem,setAdditem]= useState(false);
+  const [isAvailable,SetIsAvailable]=useState([true])
    
   const initialItem = {
   name: '',
@@ -67,6 +68,20 @@ const [newItem, setNewItem] = useState(initialItem);
     console.error("Error uploading:", error);
   }
 };
+useEffect(() => {
+  const isAvailable = async () => {
+    try {
+      const response = await apiClient.get(`/${id}/isAvailable`);
+      console.log(response.data); 
+      SetIsAvailable(response.data)
+    } catch (error) {
+      console.error("Error fetching availability:", error);
+    }
+  };
+
+  isAvailable();
+}, [id]);
+
   // const handlenewsave=async()=>{
   //    try{
   //       const response = await apiClient.post(
@@ -87,6 +102,22 @@ const [newItem, setNewItem] = useState(initialItem);
   //   }
   //   console.log(newItem)
   // }
+  const updatestatus=async()=>{
+    try{
+const response = await apiClient.put(`/${id}/isAvailable`);
+
+      if (response.status===200) {
+       
+        setEditingRow(null);
+         window.location.reload()
+      } else {
+        alert("Failed to update item");
+      }
+    }
+    catch(e){
+      alert("failed to update");
+    }
+  }
   const handleSave = async () => {
     
       console.log(editedData);
@@ -112,6 +143,15 @@ const [newItem, setNewItem] = useState(initialItem);
   return (
     <>
     <div>
+      {isAvailable? <button className="border-2 px-2 rounded hover:bg-gray-100" onClick={()=>{
+        SetIsAvailable(!isAvailable);
+        updatestatus();
+      }} >Make Unavailable</button>: <button className="border-2 px-2 rounded hover:bg-gray-100"  onClick={()=>{
+        SetIsAvailable(!isAvailable);
+        updatestatus();
+      }}>Make Available</button>}
+           
+
       <button className="border-2 px-2 rounded hover:bg-gray-100" onClick={()=>setAdditem(!additem)}>Add item</button>
     </div>
     {additem?<div className='mt-4 flex'>

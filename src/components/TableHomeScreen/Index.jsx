@@ -50,7 +50,7 @@ const Index = (data) => {
     
    
   return (
-    <div className='flex flex-col min-h-0'>{Tabletype}</div>
+    <div className='flex flex-col sm:w-screen'>{Tabletype}</div>
   )
 }
 
