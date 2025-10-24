@@ -48,6 +48,7 @@ const filteredData = data.filter((el) => {
       <th className="px-5">Order Id</th>
       <th className="px-5">Chef Id</th>
       <th className="px-18">Items</th>
+      <th className="px-18">OTP</th>
       <th className="px-5">Price</th>
       <th className="px-5">Order Status</th>
       <th className="px-5">Customer Number</th>
@@ -72,6 +73,7 @@ const filteredData = data.filter((el) => {
             ))}
           </div>
         </td>
+        <td className="text-center">{data.otp}</td>
         <td className="text-center">{data.price}</td>
         <td className="text-center">{data.orderStatus}</td>
         <td

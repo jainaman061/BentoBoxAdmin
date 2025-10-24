@@ -27,7 +27,7 @@ const Login = () => {
    const sendOtp=(values)=>{
     const {number} = values;
     axios
-    .post("https://bento-backend-849680057939.asia-south2.run.app/api/otp/send",{
+    .post("https://bento-backend-version2-849680057939.asia-south2.run.app/api/otp/send",{
         number:number,
         role:"admin"
     })
@@ -45,7 +45,7 @@ const Login = () => {
    
    const verifyOtp=(values)=>{
     const {otp} = values;
-    axios.post("https://bento-backend-849680057939.asia-south2.run.app/api/otp/verify",{
+    axios.post("https://bento-backend-version2-849680057939.asia-south2.run.app/api/otp/verify",{
         number: phone,
         otp:otp,
         role:"admin"

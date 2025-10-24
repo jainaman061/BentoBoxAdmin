@@ -50,6 +50,7 @@ tableData()   },[])
       <th className='px-5 py-2'>SubscriptionOrder Id</th>
       <th className='px-5 py-2'>Number</th>
       <th className='px-5 py-2'>Meal Name</th>
+            <th className='px-5 py-2'>OTP</th>
       <th className='px-5 py-2'>Restaurant Name</th>
       <th className='px-5 py-2'>Order Status</th>
       <th className='px-5 py-2'>Start Time</th>
@@ -70,6 +71,8 @@ tableData()   },[])
           {data.number}
         </td>
         <td className='text-center'>{data.mealName}</td>
+        <td className='text-center'>{data.otp}</td>
+
         <td 
           className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline'
           onClick={() => navigate(`/restaurant/${data.restaurantid}`)}

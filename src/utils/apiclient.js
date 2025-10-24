@@ -1,11 +1,11 @@
 import axios from 'axios'
 //    baseURL: "https://bento-backend-849680057939.asia-south2.run.app/admin/",
 
-
+// https://bento-backend-version2-849680057939.asia-south2.run.app/admin/
     // baseURL: "http://localhost:8080/admin/",
 
 const apiClient = axios.create({
-       baseURL: "https://bento-backend-849680057939.asia-south2.run.app/admin/",
+       baseURL: "https://bento-backend-version2-849680057939.asia-south2.run.app/admin/",
     headers:{
         "Access-Control-Allow-Origin":"*",
         "Content-type":"application/json; charset=UTF-8"

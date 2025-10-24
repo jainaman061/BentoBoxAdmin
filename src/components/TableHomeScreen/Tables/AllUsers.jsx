@@ -11,9 +11,12 @@ const AllUsers = (route) => {
 const navigate = useNavigate()
   useEffect(() => {
     const tableData = async () => {
+      console.log(route.route)
       try {
+
         const response = await apiClient.get(
  `${route.route}`        );
+          console.log(response)
         setData(response.data);
         SetIsLoading(false);
       } catch (e) {
