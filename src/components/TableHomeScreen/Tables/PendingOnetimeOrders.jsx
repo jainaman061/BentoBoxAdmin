@@ -54,12 +54,18 @@ const PendingOnetimeOrders = (route) => {
           <th className="px-5 py-2">Order Id</th>
           <th className="px-5 py-2">Chef Id</th>
           <th className="px-18 py-2">Items</th>
+          <th className="px-18 py-2">startTime</th>
+          <th className="px-18 py-2">endTime</th>
+
           <th className="px-18 py-2">OTP</th>
           <th className="px-5 py-2">Price</th>
           <th className="px-5 py-2">Order Status</th>
           <th className="px-5 py-2">Customer Number</th>
           <th className="px-5 py-2">Restaurant Name</th>
           <th className="px-5 py-2">Order Date</th>
+          <th className="px-5 py-2">Rider name</th>
+          <th className="px-5 py-2">Rider number</th>
+
         </tr>
       </thead>
       <tbody>
@@ -81,6 +87,8 @@ const PendingOnetimeOrders = (route) => {
                 </div>
               ))}
             </td>
+            <td className="text-center">{data.startTime}</td>
+            <td className="text-center">{data.endTime}</td>
             <td className="text-center">{data.otp}</td>
             <td className="text-center">{data.price}</td>
             <td className="text-center">{data.orderStatus}</td>
@@ -97,6 +105,8 @@ const PendingOnetimeOrders = (route) => {
               {data.restaurantName}
             </td>
             <td className="text-center">{data.orderdate}</td>
+            <td className="text-center">{data.riderDetails.name}</td>
+            <td className="text-center">{data.riderDetails.number}</td>
           </tr>
         ))}
       </tbody>

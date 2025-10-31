@@ -25,6 +25,20 @@ const ActiveSubscriptions = (route) => {
         };
         tableData();
       }, []);
+      const returnmealplantype=((id)=>{
+          if(id==1){
+            return "lunch";
+          }
+          else if(id==2){
+            return "dinner";
+          }
+          else if(id==3){
+            return "combo";
+          }
+          else{
+            return "invalid";
+          }
+      })
       const filteredData = data.filter((el) => {
     if (search.trim() === "") {
       return true; 
@@ -62,7 +76,8 @@ const ActiveSubscriptions = (route) => {
         <th className='px-5' >Active Status</th>
      
         <th className='px-5'>start date</th>
-        <th className='px-5'>start date</th>
+        <th className='px-5'>end date</th>
+        <th className='px-5'>Subscription type</th>
         <th className='px-5'>Pause Status</th>
 
         <th className='px-5'>pause start date</th>
@@ -92,6 +107,8 @@ const ActiveSubscriptions = (route) => {
            
               <td className='text-center'>{data.startdate}</td>
               <td className='text-center'>{data.enddate}</td>
+              <td className='text-center'>{returnmealplantype(data.mealplantype)}</td>
+
               <td className='text-center'>{data.ispaused ? "tue":"false"}</td>
               <td className='text-center'>{(data.pause_start_date===null )? "-":`${data.pause_start_date}`} </td>
               <td className='text-center'>{(data.pause_end_date===null )? "-":`${data.pause_end_date}`} </td>
