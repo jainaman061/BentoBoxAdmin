@@ -84,6 +84,7 @@ const ActiveSubscriptions = (route) => {
         <th className='px-5'>pause end date</th>
 
         <th className='px-5'>price</th>
+        <th className='px-5'>expirydate</th>
 
 
 
@@ -114,6 +115,7 @@ const ActiveSubscriptions = (route) => {
               <td className='text-center'>{(data.pause_end_date===null )? "-":`${data.pause_end_date}`} </td>
 
               <td className='text-center'>{data.price}</td>
+              <td className='text-center'>{data.expirydate}</td>
 
             </tr>
           ))

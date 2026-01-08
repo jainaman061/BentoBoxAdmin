@@ -4,7 +4,17 @@ import apiClient from '../../../utils/apiclient';
 import { useNavigate } from 'react-router-dom';
 
 const PendingSubscriptionOrders = ({route}) => {
-  
+  const SUBSCRIPTION_STATUSES = [
+  "ordered",
+  "delivered",
+  "cancelled",
+  "Refunded",
+  "Rider is assigned",
+  "on the way"
+];
+const [statusMap, setStatusMap] = useState({});
+
+
   const navigate=useNavigate();
     const [data,Setdata]=useState([])
      const [search,Setsearch]=useState("")
@@ -16,6 +26,12 @@ const PendingSubscriptionOrders = ({route}) => {
           const data=await apiClient.get( "/pendingSubscriptionorders");
           console.log(data.data);
           Setdata(data.data);
+          const  map = {};
+          data.data.forEach((o) => {
+          map [o.id] = o.status;
+          });
+          setStatusMap(map);
+
           
         }
         catch(e){
@@ -24,6 +40,34 @@ const PendingSubscriptionOrders = ({route}) => {
   
       }
 tableData()   },[])
+const handleStatusChange = (orderId, newStatus) => {
+  setStatusMap((prev) => ({
+    ...prev,
+    [orderId]: newStatus,
+  }));
+};
+
+const handleSaveStatus = async (orderId) => {
+  const newStatus = statusMap[orderId];
+
+  try {
+    await apiClient.put(
+      `/updateSubscriptionOrderStatus/${orderId}/${newStatus}`
+    );
+
+    // update table data locally
+    Setdata((prev) =>
+      prev.map((order) =>
+        order.id === orderId
+          ? { ...order, status: newStatus }
+          : order
+      )
+    );
+  } catch (e) {
+    console.error(e);
+  }
+};
+
   const filteredData = data.filter((el) => {
     if (search.trim() === "") {
       return true; 
@@ -79,7 +123,32 @@ tableData()   },[])
         >
           {data.restaurantName}
         </td>
-        <td className='text-center'>{data.status}</td>
+<td className="text-center">
+  <div className="flex items-center justify-center gap-2">
+    <select
+      className="border rounded px-2 py-1"
+      value={statusMap[data.id] ?? data.status}
+      onChange={(e) =>
+        handleStatusChange(data.id, e.target.value)
+      }
+    >
+      {SUBSCRIPTION_STATUSES.map((status) => (
+        <option key={status} value={status}>
+          {status.replace(/_/g, " ").toUpperCase()}
+        </option>
+      ))}
+    </select>
+
+    {statusMap[data.id] !== data.status && (
+      <button
+        onClick={() => handleSaveStatus(data.id)}
+        className="bg-green-600 text-white px-2 py-1 rounded text-sm"
+      >
+        Save
+      </button>
+    )}
+  </div>
+</td>
         <td className='text-center'>{data.startTime}</td>
         <td className='text-center'>{data.endTime}</td>
         <td className='text-center'>{data.orderdate}</td>

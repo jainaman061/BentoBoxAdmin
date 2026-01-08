@@ -1,11 +1,11 @@
 import React from 'react'
-import EditContainerTable from "../../components/EditContainerTable/Index"
 import Navbar from "../../components/NavBar/Index"
+import AddCoupon from "../../components/AddCoupon/Index" 
 const Index = () => {
   return (
     <div>
         <Navbar />
-      <EditContainerTable />
+        <AddCoupon />
     </div>
   )
 }

@@ -8,6 +8,7 @@ import UnAuthorizedChefs from "./Pages/UnAuthorizedChef/Index"
 import Userdetails from "./Pages/UserDetails/index"
 import WeekMealNotAdded from "./Pages/WeekMealNotAdded/index"
 import EditContainer from "./Pages/EditContainer/Index"
+import AddCoupon from "./Pages/Addcoupon/Index"
 const App = () => {
  
   return (
@@ -22,6 +23,7 @@ const App = () => {
    <Route path="/userDetails/:number" element={<Userdetails />}/>
    <Route path='/weekmealnotadded' element={<WeekMealNotAdded />} />
     <Route path='/editContainer' element={<EditContainer />} />
+<Route path='/addCoupon' element={<AddCoupon />} />
 
 </Routes>
 </BrowserRouter>

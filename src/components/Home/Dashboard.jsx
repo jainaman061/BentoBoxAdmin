@@ -10,6 +10,7 @@ const [count,SetCount]=useState([])
       try{
         const data=await apiClient.get("/getCounts");
         SetCount(data.data)
+        console.log(data)
       }
       catch(e){
         console.error(e); 

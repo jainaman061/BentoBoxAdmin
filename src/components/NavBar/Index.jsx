@@ -99,6 +99,11 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>Edit Container</a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/addCoupon')
+                        SetSidepanel(!sidepanel)
+
+          }}>Add Coupon</a></li>
         </ol>  
 
 

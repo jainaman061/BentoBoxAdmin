@@ -4,26 +4,67 @@ import apiClient from '../../../utils/apiclient'
 import { useNavigate } from 'react-router-dom'
 
 const PendingOnetimeOrders = (route) => {
+  const ORDER_STATUSES = [
+  "ordered",
+  "delivered",
+  "cancelled",
+  "Refunded",
+  "Rider is assigned",
+  "on the way"
+];
+
   console.log(route.route);
    const [search,Setsearch]=useState("")
+const [statusMap, setStatusMap] = useState({});
+useEffect(() => {
+  const tableData = async () => {
+    try {
+      const res = await apiClient.get(`${route.route}`);
+      Setdata(res.data);
+
+      // initialize status map
+      const map = {};
+      res.data.forEach((o) => {
+        map[o.id] = o.orderStatus;
+      });
+      setStatusMap(map);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  tableData();
+}, []);
+const handleStatusChange = (orderId, newStatus) => {
+  setStatusMap((prev) => ({
+    ...prev,
+    [orderId]: newStatus,
+  }));
+};
+const handleSaveStatus = async (orderId) => {
+  const newStatus = statusMap[orderId];
+
+  try {
+    await apiClient.put(
+      `/updateOrderStatus/${orderId}/${newStatus}`
+    );
+
+    Setdata((prev) =>
+      prev.map((order) =>
+        order.id === orderId
+          ? { ...order, orderStatus: newStatus }
+          : order
+      )
+    );
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 
   const navigate=useNavigate()
             const [data,Setdata]=useState([])
     
-      useEffect(()=>{
-          const tableData=async()=>{
-            try{
-              const data=await apiClient.get( `${route.route}`);
-              console.log(data.data);
-              Setdata(data.data);
-              
-            }
-            catch(e){
-              console.error(e); 
-            }
       
-          }
-    tableData()    },[])
     const filteredData = data.filter((el) => {
     if (search.trim() === "") {
       return true; 
@@ -91,7 +132,31 @@ const PendingOnetimeOrders = (route) => {
             <td className="text-center">{data.endTime}</td>
             <td className="text-center">{data.otp}</td>
             <td className="text-center">{data.price}</td>
-            <td className="text-center">{data.orderStatus}</td>
+              <td className="text-center">
+  <div className="flex items-center justify-center gap-2">
+    <select
+      className="border rounded px-2 py-1"
+      value={statusMap[data.id] ?? data.orderStatus}
+      onChange={(e) => handleStatusChange(data.id, e.target.value)}
+    >
+      {ORDER_STATUSES.map((status) => (
+        <option key={status} value={status}>
+          {status.replace(/_/g, " ").toUpperCase()}
+        </option>
+      ))}
+    </select>
+
+    {statusMap[data.id] !== data.orderStatus && (
+      <button
+        onClick={() => handleSaveStatus(data.id)}
+        className="bg-green-600 text-white px-2 py-1 rounded text-sm"
+      >
+        Save
+      </button>
+    )}
+  </div>
+</td>
+
             <td
               className="text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline"
               onClick={() => navigate(`/userDetails/${data.number}`)}
