@@ -9,6 +9,9 @@ import Userdetails from "./Pages/UserDetails/index"
 import WeekMealNotAdded from "./Pages/WeekMealNotAdded/index"
 import EditContainer from "./Pages/EditContainer/Index"
 import AddCoupon from "./Pages/Addcoupon/Index"
+import CreateOnetimeorder from "./Pages/CreateOneTimeOrder/Index"
+import CreateSubscription from "./Pages/CreateSubscription/Index"
+import RatingsPage from "./Pages/RatingsPage/Index"
 const App = () => {
  
   return (
@@ -24,6 +27,9 @@ const App = () => {
    <Route path='/weekmealnotadded' element={<WeekMealNotAdded />} />
     <Route path='/editContainer' element={<EditContainer />} />
 <Route path='/addCoupon' element={<AddCoupon />} />
+<Route path="/ratings/orders" element={<RatingsPage />} />
+<Route path="/onetimeorder/create" element={<CreateOnetimeorder/>} />
+<Route path="/subscription/create" element={<CreateSubscription/>} />
 
 </Routes>
 </BrowserRouter>

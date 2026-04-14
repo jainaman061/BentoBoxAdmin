@@ -1,10 +1,17 @@
 import React from 'react'
 
-const DashBoardsCards = ({data}) => {
+const DashBoardsCards = ({ data }) => {
   return (
-    <div className='border-2 border-gray-300 p-3 mr-2'>
-      <h1 className='text-3xl pb-2'>{data.count}</h1>
-      <p>{data.title}</p>
+    <div className="border-2 border-gray-300 p-2 md:p-3 w-full flex flex-col justify-center items-center">
+
+      <h1 className="text-lg sm:text-xl md:text-3xl font-semibold pb-1">
+        {data.count}
+      </h1>
+
+      <p className="text-xs sm:text-sm md:text-base text-center">
+        {data.title}
+      </p>
+
     </div>
   )
 }

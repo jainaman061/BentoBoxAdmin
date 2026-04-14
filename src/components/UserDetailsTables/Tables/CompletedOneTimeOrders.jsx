@@ -25,6 +25,7 @@ const CompletedOneTimeOrders = (content) => {
         <th className='px-18'>items</th>
         <th className='px-5'>price</th>
         <th className='px-5'>orderStatus</th>
+        <th className='px-5'>order Date</th>
         <th className='px-5'>Customer number</th>
         <th className='px-5'>Restaurant Name</th>
 
@@ -44,6 +45,7 @@ const CompletedOneTimeOrders = (content) => {
               ))}</td>
               <td className='text-center '>{data.price}</td>
               <td className='text-center'>{data.orderStatus}</td>
+              <td className='text-center'>{data.orderdate}</td>
               <td className='text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
               <td className='text-center'>{data.restaurantName}</td>
             </tr>

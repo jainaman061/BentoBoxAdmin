@@ -35,10 +35,19 @@ const Index = () => {
   const handleSave = async() => {
 
     try{
-      const formdata = await apiClient.put(
-  `/editcontainer?id=${editedData.id}&name=${editedData.name}&price=${editedData.price}`);
-  console.log(formdata.data);
-  
+       const payload = {
+  name: editedData.name,
+  isvalid: editedData.isvalid === "true" || editedData.isvalid === true,
+  includeInDropdown: editedData.includeInDropdown || false,
+  maximumDiscount: Number(editedData.maximumDiscount),
+  minimumOrderValue: Number(editedData.minimumOrderValue),
+  discountPercentage: Number(editedData.discountPercentage),
+};
+    const response = await apiClient.put(
+      `/coupon/${editedData.id}`,
+      payload
+    );
+  console.log(response.data)
 
     }
     catch(e){
@@ -56,16 +65,21 @@ const Index = () => {
   };
   const handleAdd=async()=>{
      try{
-      const formData =new FormData();
-      formData.append("name",newContainerData.name)
-      formData.append("maximumDiscount",parseInt(newContainerData.maximumDiscount))
-      formData.append("minimumOrderValue",parseInt(newContainerData.minimumOrderValue))
-      formData.append("discountPercentage",parseInt(newContainerData.discountPercentage))
-      const response = await apiClient.post("/coupon/add", formData,{
-         headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      });
+      const payload = {
+  name: newContainerData.name,
+  maximumDiscount: Number(newContainerData.maximumDiscount),
+  minimumOrderValue: Number(newContainerData.minimumOrderValue),
+  discountPercentage: Number(newContainerData.discountPercentage),
+  isvalid: newContainerData.isvalid || false,
+  includeInDropdown: newContainerData.includeInDropdown || false,
+};
+      // const formData =new FormData();
+      // formData.append("name",newContainerData.name)
+      // formData.append("maximumDiscount",parseInt(newContainerData.maximumDiscount))
+      // formData.append("minimumOrderValue",parseInt(newContainerData.minimumOrderValue))
+      // formData.append("discountPercentage",parseInt(newContainerData.discountPercentage))
+      // formData.append("isvalid",true)
+      const response = await apiClient.post("/coupon/add", payload);
     console.log(response.data);
         const updatedResponse = await apiClient.get("/coupon");
     setData(updatedResponse.data);
@@ -116,16 +130,52 @@ const Index = () => {
                 )}
               </td>
                <td className="text-center">
-                {editRow === row.id ? (
-                  <input
-                    type="text"
-                    value={editedData.isvalid?"true":"false"}
-                    onChange={(e) => handleChange(e, "isvalid")}
-                  />
-                ) : (
-                  row.isvalid?  "true":"false"
-                )}
-              </td> <td className="text-center">
+  {editRow === row.id ? (
+    <div className="flex flex-col items-center gap-1">
+
+      {/* isvalid */}
+      <label>
+        <input
+          type="checkbox"
+          checked={editedData.isvalid === true || editedData.isvalid === "true"}
+          onChange={(e) =>
+            setEditedData({
+              ...editedData,
+              isvalid: e.target.checked,
+            })
+          }
+        />
+        <span className="ml-1">Is Valid</span>
+      </label>
+
+      {/* includeInDropdown */}
+      <label>
+        <input
+          type="checkbox"
+         checked={
+  editedData.includeInDropdown === true ||
+  editedData.includeInDropdown === "true"
+}
+          onChange={(e) =>
+            setEditedData({
+              ...editedData,
+              includeInDropdown: e.target.checked,
+            })
+          }
+        />
+        <span className="ml-1">Include In Dropdown</span>
+      </label>
+
+    </div>
+  ) : (
+    <>
+      {row.isvalid ? "ACTIVE" : "INACTIVE"} <br />
+      {row.includeInDropdown ? "IN DROPDOWN" : "NOT IN DROPDOWN"}
+    </>
+  )}
+</td>
+
+ <td className="text-center">
                 {editRow === row.id ? (
                   <input
                     type="text"
@@ -184,46 +234,72 @@ const Index = () => {
                   onClick={()=>SetnewConatiner(!newContainer)}>
                     Add new Coupon
                   </button>
-                  {newContainer? <div className="mt-2">
-                    <input
-                    type="text"
-                    placeholder="Coupon name"
-                    className="border-2 border-indigo-600 text-center mr-2"
-                    onChange={(e) => handlenewChange(e, "name")}
-                    
-                    
-                  />
-                   
-                   <input
-                    type="number"
-                    placeholder="maximumDiscount"
-                    className="border-2 border-indigo-600 text-center"
-                      onChange={(e) => handlenewChange(e, "maximumDiscount")}
-                    
-                  />
-                   <input
-                    type="number"
-                    placeholder="minimumOrderValue"
-                    className="border-2 border-indigo-600 text-center"
-                      onChange={(e) => handlenewChange(e, "minimumOrderValue")}
-                    
-                  />
-                   <input
-                    type="number"
-                    placeholder="discountPercentage"
-                    className="border-2 border-indigo-600 text-center"
-                      onChange={(e) => handlenewChange(e, "discountPercentage")}
-                    
-                  />
-                  <button
-                  
-                  
-                    className="bg-blue-500 text-white px-3 py-1 ml-2 rounded justify-center text-center"
-                  onClick={handleAdd}
-                  >
-                    Add
-                  </button>
-                  </div>:""}
+                  {newContainer? <div className="mt-2 flex flex-col gap-2">
+
+  <input
+    type="text"
+    placeholder="Coupon name"
+    className="border-2 border-indigo-600 text-center mr-2"
+    onChange={(e) => handlenewChange(e, "name")}
+  />
+
+  <input
+    type="number"
+    placeholder="maximumDiscount"
+    className="border-2 border-indigo-600 text-center"
+    onChange={(e) => handlenewChange(e, "maximumDiscount")}
+  />
+
+  <input
+    type="number"
+    placeholder="minimumOrderValue"
+    className="border-2 border-indigo-600 text-center"
+    onChange={(e) => handlenewChange(e, "minimumOrderValue")}
+  />
+
+  <input
+    type="number"
+    placeholder="discountPercentage"
+    className="border-2 border-indigo-600 text-center"
+    onChange={(e) => handlenewChange(e, "discountPercentage")}
+  />
+
+  {/* isvalid checkbox */}
+  <label>
+    <input
+      type="checkbox"
+      onChange={(e) =>
+        setnewContainerData({
+          ...newContainerData,
+          isvalid: e.target.checked,
+        })
+      }
+    />
+    <span className="ml-1">Is Valid</span>
+  </label>
+
+  {/* includeInDropdown checkbox */}
+  <label>
+    <input
+      type="checkbox"
+      onChange={(e) =>
+        setnewContainerData({
+          ...newContainerData,
+          includeInDropdown: e.target.checked,
+        })
+      }
+    />
+    <span className="ml-1">Include In Dropdown</span>
+  </label>
+
+  <button
+    className="bg-blue-500 text-white px-3 py-1 ml-2 rounded"
+    onClick={handleAdd}
+  >
+    Add
+  </button>
+
+</div>:""}
     </div>
   );
 };

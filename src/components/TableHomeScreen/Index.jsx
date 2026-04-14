@@ -8,6 +8,9 @@ import ActiveSubscriptons from "./Tables/ActiveSubscriptions"
 import CompletedSubscriptons from "./Tables/CompletedSubscriptons"
 import AllUsers from './Tables/AllUsers'
 import Restaurantdata from './Tables/Restaurantdata'
+import Transactions from './Tables/Transactions'
+import AdminApprovals from './Tables/AdminApprovals'
+import AddBbCoins from './Tables/AddBbCoins'
 const Index = (data) => {
         const [Tabletype,SetTableType]=useState(<PendingSubscriptionOrders />)
     const type=data.data
@@ -30,7 +33,7 @@ const Index = (data) => {
             SetTableType(<ActiveSubscriptons route={"/Activesubscriptions"}/>)
             break
         case "CompletedSubscriptons":
-            SetTableType(<CompletedSubscriptons route={"/CompletedSubscription"} />)
+            SetTableType(<CompletedSubscriptons route={"CompletedHistorySubscription"} />)
             break
        case "AllRestaurants":
             SetTableType(<Restaurantdata route={"/restaurant"} />)
@@ -44,13 +47,22 @@ const Index = (data) => {
         case "AllRiders":
             SetTableType(<AllUsers key="riders" route={"/AllRiders"} />)
             break
+        case "transactions":
+            SetTableType(<Transactions route={"/transactions"}/>)
+            break
+        case "OrderSelfDeliver":
+            SetTableType(<AdminApprovals route={"/OrderSelfDeliver"}/>)
+            break
+        case "AddBbCoins":
+            SetTableType(<AddBbCoins route={"/AddBbCoins"}/>)
+            break
 
     }
     },[data])
     
    
   return (
-    <div className='flex flex-col sm:w-screen'>{Tabletype}</div>
+    <div className='flex flex-col text-center  items-center sm:w-screen '>{Tabletype}</div>
   )
 }
 

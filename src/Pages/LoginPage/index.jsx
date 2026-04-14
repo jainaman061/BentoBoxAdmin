@@ -6,6 +6,10 @@ import { ErrorMessage, Field, Formik ,Form} from 'formik';
 import * as Yup from "yup";
 const Login = () => {
 
+    const localurlsend = "http://localhost:8080/api/otp/send"
+    const localurlverify = "http://localhost:8080/api/otp/verify"
+    const liveurlsend="https://clone-backend.getbentobox.in/api/otp/send"
+    const liveurlverify="https://clone-backend.getbentobox.in/api/otp/verify"
 
     const navigate = useNavigate();
 
@@ -27,7 +31,7 @@ const Login = () => {
    const sendOtp=(values)=>{
     const {number} = values;
     axios
-    .post("https://backend.getbentobox.in/api/otp/send",{
+    .post(liveurlsend,{
         number:number,
         role:"admin"
     })
@@ -45,7 +49,7 @@ const Login = () => {
    
    const verifyOtp=(values)=>{
     const {otp} = values;
-    axios.post("https://backend.getbentobox.in/api/otp/verify",{
+    axios.post(liveurlverify,{
         number: phone,
         otp:otp,
         role:"admin"

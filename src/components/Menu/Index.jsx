@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../utils/apiclient';
+import { useNavigate } from 'react-router-dom';
 
-const Index = ({ data ,id,activesessione}) => {
+const Index = ({ data ,id,activesessione,refreshData }) => {
+  const navigate = useNavigate()
   console.log(activesessione)
   console.log(id)
   const [editingRow, setEditingRow] = useState(null);
@@ -64,6 +66,9 @@ const [newItem, setNewItem] = useState(initialItem);
       headers: { "Content-Type": "multipart/form-data" },
     });
     console.log(response);
+    refreshData();
+setAdditem(false);
+setNewItem(initialItem);
   } catch (error) {
     console.error("Error uploading:", error);
   }
@@ -109,7 +114,8 @@ const response = await apiClient.put(`/${id}/isAvailable`);
       if (response.status===200) {
        
         setEditingRow(null);
-         window.location.reload()
+        //  window.location.reload()
+refreshData();
       } else {
         alert("Failed to update item");
       }
@@ -121,19 +127,31 @@ const response = await apiClient.put(`/${id}/isAvailable`);
   const handleSave = async () => {
     
       console.log(editedData);
+      const sendata={
+        description:editedData.description,
+        isAvailable:editedData.isAvailable,
+        name:editedData.name,
+        price:editedData.price,
+        type:editedData.type,
+
+
+      }
+      console.log(sendata)
       try{
         const response = await apiClient.put(
-  `/edititem/${id}/${editedData.id}`,editedData);
+  `/edititem/${id}/${editedData.id}`,sendata);
       
       console.log(response)
 
       if (response.status===200) {
        
         setEditingRow(null);
-         window.location.reload()
-      } else {
-        alert("Failed to update item");
-      }
+                // navigate(`/restaurant/${id}`)
+                refreshData();
+
+
+        //  window.location.reload()
+      } 
     } catch (error) {
       console.error("Error:", error);
       alert("Error while saving data");

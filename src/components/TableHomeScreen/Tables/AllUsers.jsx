@@ -43,7 +43,7 @@ const navigate = useNavigate()
   return (
    <div>
     <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
-     <div className=" overflow-y-auto max-h-96 w-full pb-4">
+     <div className="w-screen   overflow-x-auto overflow-y-auto overscroll-x-contain max-h-96  pb-4">
 <table className='border-4    border-gray-300 mt-8 w-full'>
   <thead>
       <tr>
@@ -54,6 +54,10 @@ const navigate = useNavigate()
         <th className='px-5' >name</th>
         <th className='px-18'>number</th>
         <th className='px-5'>email</th>
+        <th className='px-5'>city</th>
+        <th className='px-5'>street</th>
+        <th className='px-5'>latitude</th>
+        <th className='px-5'>longitude</th>
        
 
       </tr>
@@ -69,6 +73,10 @@ const navigate = useNavigate()
               
               <td className='text-center  hover:cursor-pointer hover:underline' onClick={()=>{navigate(`/userDetails/${data.number}`)}}>{data.number}</td>
                               <td className='text-center'>{data.email}</td>
+                              <td className='text-center'>{data.city}</td>
+                              <td className='text-center'>{data.street}</td>
+                              <td className='text-center px-2'>{data.latitude}</td>
+                              <td className='text-center px-2'>{data.longitude}</td>
 
               </tr>
           ))

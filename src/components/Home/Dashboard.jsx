@@ -24,12 +24,11 @@ const [count,SetCount]=useState([])
     "values":"1"
   })
   return (
-    <div className='md:w-1/2 lg:w-1/2 sm:mr-2'>
+<div className="w-full md:w-1/2 lg:w-1/2">
       <div>
         DashBoard
       </div>
-      <div className='flex mt-2 '>
-      {Object.entries(count).map(([key, value], index) => (
+<div className="flex overflow-x-auto gap-3 mt-3 pb-2 px-2 md:grid md:grid-cols-4 md:overflow-visible">     {Object.entries(count).map(([key, value], index) => (
   <Cards key={index} data={{ title: key, count: value }} />
 ))}
     </div>

@@ -104,6 +104,39 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>Add Coupon</a></li>
+          
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/transactions')
+                        SetSidepanel(!sidepanel)
+
+          }}>Transactions</a></li>
+          <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/ratings/orders')
+                        SetSidepanel(!sidepanel)
+
+          }}>Order Ratings</a></li>
+              <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/onetimeorder/create')
+                        SetSidepanel(!sidepanel)
+
+          }}>Create One time order</a></li>
+              <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/subscription/create')
+                        SetSidepanel(!sidepanel)
+
+          }}>Create Subscription</a></li>
+              <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/OrderSelfDeliver')
+                        SetSidepanel(!sidepanel)
+
+          }}>OrderSelfDeliver</a></li>
+              <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/AddBbCoins')
+                        SetSidepanel(!sidepanel)
+
+          }}>AddBbCoins</a></li>
+        
+
         </ol>  
 
 

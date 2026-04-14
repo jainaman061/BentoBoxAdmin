@@ -9,7 +9,11 @@ import Subscription from "../../components/subscriptions/Index"
 import SubscriptionHistory from "../../components/Subscription History/Index"
 import Navbar from "../../components/NavBar/Index"
 import RestaurantDetails from "../../components/RestaurantDetails/index"
-const Index = () => {
+import RestaurantRatings from '../../components/Ratings/RestaurantRatings'
+import TimeSlots from '../../components/TimeSlots/Index'
+import MealPlan from '../../components/MealPLan/Index'
+import Highlights from '../../components/Highlights/Index'
+const   Index = () => {
   const navigate=useNavigate()
   useEffect(() => {
      if (!localStorage.getItem("bentoAdmin")) {
@@ -26,9 +30,12 @@ const Index = () => {
     const[subscriptionHistory,SetsubscriptionHistory] = useState([]);
     const [activeSession,SetactiveSession]=useState("menu");
     const [weekmeals,SetweekMeals]=useState([])
+    const [ratings,setRatings]= useState([])
+    const [timeslots,setTimeSlots]= useState([])
+    const [mealplan,SetMealplan] = useState([])
     
     // console.log(id)
-    useEffect(()=>{
+    
         const fetchData=async()=>{
             try{
                 const menu = await apiClient.get (`/items/${id}`);
@@ -38,22 +45,29 @@ const Index = () => {
                 const subscriptionHistory = await apiClient.get (`/subscriptionHistory/${id}`);
                 const weekmeals = await apiClient.get(`restaurant/mealsaddedtoday/${id}`)
                 const restaurantdetails=await apiClient.get(`/restaurantInfo/${id}`)
+                const ratings=await apiClient.get(`/restaurant/rating/${id}`)
+                const timeslots=await apiClient.get(`/get/timeslot/${id}`)
                 SetMenu(menu.data);
                 SetOrders(orders.data)
                 Setsubscriptionsorders(subscriptionsorders.data)
                 Setsubscriptions(subscriptions.data)
                 SetsubscriptionHistory(subscriptionHistory.data)
                 SetweekMeals(weekmeals.data)
-                SetRestaurantDetails(restaurantdetails.data)                
-                console.log(restaurantdetails.data);
+                SetRestaurantDetails(restaurantdetails.data)    
+                setRatings(ratings.data)            
+                setTimeSlots(timeslots.data)            
+                console.log(ratings.data);
+
+
                 
             }
             catch (err) {
         console.error("Something went wrong",err);
       }
         }
+        useEffect(()=>{
         fetchData();
-    },[])
+    },[id])
   return (
     <div className='flex flex-col  items-center text-center'>
        <div className='justify-between w-screen'>
@@ -68,6 +82,10 @@ const Index = () => {
             <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("SubscriptionHistory")}}>Subscriptions history</button>
             <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("WeekMealsToday")}}>Week Meals Today</button>
             <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("restaurantdetails")}}>Restaurant details</button>
+                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("restaurantratings")}}>Restaurant Rating</button>
+                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("timeslots")}}>Time Slots</button>
+                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("mealplan")}}>Meal Plans</button>
+                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("highlights")}}>Highlights</button>
 
         </div>
         </div>
@@ -77,7 +95,7 @@ const Index = () => {
 
 
         {/* <h1 className='text-3xl'>menu</h1> */}
-      {activeSession==="menu" && <Menu data={menu} id={id} activesessione={"menu"}/>}
+      {activeSession==="menu" && <Menu data={menu} id={id} activesessione={"menu"} refreshData={fetchData}/>}
       {/* <h1 className='text-3xl'>orders</h1> */}
       {activeSession==="orders" &&<Orders data={orders}/>}
       {/* <h1 className='text-3xl'>subscriptionsorders</h1> */}
@@ -88,6 +106,11 @@ const Index = () => {
       {activeSession==="SubscriptionHistory" &&<SubscriptionHistory data={subscriptionHistory} />}
       {activeSession==="WeekMealsToday"&& <Menu data={weekmeals} id={id} activesessione={"WeekMealsToday"}/>}
             {activeSession==="restaurantdetails"&& <RestaurantDetails data={restaurantdetails} />}
+
+            {activeSession==="restaurantratings"&& <RestaurantRatings data={ratings} />}
+            {activeSession==="timeslots"&& <TimeSlots data={id} />}
+            {activeSession==="mealplan"&& <MealPlan data={id} />}
+            {activeSession==="highlights"&& <Highlights data={id} />}
 
     
       

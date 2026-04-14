@@ -33,9 +33,17 @@ const Index = ({ data }) => {
       <div className='flex justify-center'>
         {Object.entries(table ?? {}).map(([key, value]) => {
           const handleClick = () => {
-            setActiveSession(key);
-            setContent(value ?? []); 
-          };
+  setActiveSession(key);
+
+  if (key === "subscription History") {
+    const completed = table["completed subscriptions"] || [];
+    const history = table["subscription History"] || [];
+
+    setContent([...completed, ...history]); // ✅ merge both
+  } else {
+    setContent(value ?? []);
+  }
+};
 
           return (
             <div
