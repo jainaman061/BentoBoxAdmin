@@ -8,7 +8,7 @@ import axios from 'axios'
     const liveurl = "https://clone-backend.getbentobox.in/admin/"
     console.log("CLONE BUILD V2 🚀");
 const apiClient = axios.create({
-       baseURL:liveurl,
+       baseURL:localurl,
     headers:{
         "Access-Control-Allow-Origin":"*",
         "Content-type":"application/json; charset=UTF-8"
