@@ -18,6 +18,11 @@ const PendingOnetimeOrders = (route) => {
   "delivered_Refunded",
 
 ];
+const [data, Setdata] = useState([]);
+const [page, setPage] = useState(0);
+const [size] = useState(20);
+const [totalPages, setTotalPages] = useState(0);
+const [loading, setLoading] = useState(false);
 const handleRefundChange = (orderId, field, value) => {
   setRefundMap((prev) => ({
     ...prev,
@@ -31,41 +36,44 @@ const handleRefundChange = (orderId, field, value) => {
    const [search,Setsearch]=useState("")
 const [statusMap, setStatusMap] = useState({});
 useEffect(() => {
-  const tableData = async () => {
-    try {
-      const res = await apiClient.get(`${route.route}`);
-      Setdata(res.data);
+  fetchOrders();
+}, [page,search]);
 
-      // status map
-      const map = {};
-      res.data.forEach((o) => {
-        map[o.id] = o.orderStatus;
-      });
-      setStatusMap(map);
+const fetchOrders = async () => {
+  try {
+    setLoading(true);
 
-      // date map
-      const map2 = {};
-      res.data.forEach((o) => {
-        map2[o.id] = o.orderdate;
-      });
-      setDateMap(map2);
+    const res = await apiClient.get(
+  `${route.route}?page=${page}&size=${size}&search=${search}`
+);
 
-      // ✅ NEW: refund map (coins + cash)
-      const map3 = {};
-      res.data.forEach((o) => {
-        map3[o.id] = {
-          coins: o.refundedCoins || 0,   // adjust key if backend name differs
+    Setdata(res.data.content);
+    setTotalPages(res.data.totalPages);
+
+    const status = {};
+    const dates = {};
+    const refunds = {};
+
+    res.data.content.forEach((o) => {
+      status[o.id] = o.orderStatus;
+
+      dates[o.id] = o.orderdate;
+
+      refunds[o.id] = {
+        coins: o.refundedCoins || 0,
         cash: o.refundedCash || 0,
-        };
-      });
-      setRefundMap(map3);
+      };
+    });
 
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  tableData();
-}, []);
+    setStatusMap(status);
+    setDateMap(dates);
+    setRefundMap(refunds);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
 const handleStatusChange = (orderId, newStatus) => {
   setStatusMap((prev) => ({
     ...prev,
@@ -103,7 +111,6 @@ const handleSaveStatus = async (orderId) => {
 
 
   const navigate=useNavigate()
-            const [data,Setdata]=useState([])
     
       
     const filteredData = data.filter((el) => {
@@ -129,22 +136,28 @@ const handleSaveStatus = async (orderId) => {
     value={search}
   />
 
-  <div className="w-screen    overflow-x-auto overflow-y-auto overscroll-x-contain h-96 ">
-    <table className="min-w-full border-4 border-gray-300 mt-4">
+    <div className="w-screen   overflow-x-auto overflow-y-auto overscroll-x-contain max-h-96  pb-4">
+     {loading ? (
+<div className="absolute inset-0 bg-white/60 flex justify-center items-center z-10">
+      Loading...
+    </div>
+) : (
+<table className="border-4 border-gray-300 mt-8 w-full">
       <thead>
         <tr>
           <th className="px-5 py-2">Order Id</th>
                 <th className='px-5 py-2'>Public Id</th>
 
-          <th className="px-5 py-2">Chef Id</th>
-          <th className="px-18 py-2">Items</th>
-          <th className="px-18 py-2">startTime</th>
-          <th className="px-18 py-2">endTime</th>
+          <th className="px-5 ">Chef Id</th>
+          <th className="px-5 ">Items</th>
+          <th className="px-5 ">startTime</th>
+          <th className="px-5">endTime</th>
+          <th className="px-18 py-2">Order Items <br/><span className='p-2'> name </span><span className='p-2'> count </span><span className='p-2'> price </span><span className='p-2'> description </span></th>
 
-      <th className="px-18">Delivery Instruction</th>
+      <th className="px-5">Delivery Instruction</th>
 
           <th className="px-18 py-2">OTP</th>
- <th className="px-5">Non Discounted Price</th>
+      <th className="px-5">Non Discounted Price</th>
       <th className="px-5">Price</th>
       <th className="px-5">Coins</th>
       <th className="px-5">Discount Value</th>
@@ -159,11 +172,12 @@ const handleSaveStatus = async (orderId) => {
       <th className="px-2 md:px-5 py-2 whitespace-nowrap text-xs md:text-sm">longitude</th>
           <th className="px-5 py-2">Rider name</th>
           <th className="px-5 py-2">Rider number</th>
-
+<th className="px-5 py-2 whitespace-nowrap">Created At</th>
+          <th className="px-5 py-2 whitespace-nowrap">Updated At</th>
         </tr>
       </thead>
       <tbody>
-        {filteredData.map((data, index) => (
+        {data.map((data, index) => (
           <tr
             key={index}
             className="items-center justify-center border border-gray-300"
@@ -172,19 +186,26 @@ const handleSaveStatus = async (orderId) => {
                     <td className='text-center px-2'>{data.publicId}</td>
 
             <td className="text-center">{data.chefid}</td>
-            <td className="flex flex-col justify-center text-center items-center">
-              {data.orderItems.map((orderItems, idx) => (
-                <div key={idx} className="flex">
-                  <div className="flex">
-                    <span>{orderItems.name}</span>x
-                    <span>{orderItems.count}</span>
-                  </div>
-                  = <span>{orderItems.price}</span>
-                </div>
-              ))}
-            </td>
+           <td className="text-center">
+          <div className="flex flex-col items-center">
+            {data.orderItems.map((orderItems, idx) => (
+              <div key={idx} className="flex gap-2">
+                <span>{orderItems.name}</span>x
+                <span>{orderItems.count}</span>=
+                <span>{orderItems.price}</span>
+              </div>
+            ))}
+          </div>
+        </td>
             <td className="text-center">{data.startTime}</td>
             <td className="text-center">{data.endTime}</td>
+             <td  className='flex flex-col justify-center text-center items-center'>{data.orderItems.map((orderItems,idx)=>(
+                <tr key={idx} className='flex '><td className='w-20'>{orderItems.name}</td>
+                <td className='w-20'>{orderItems.count}</td>
+                <td className='w-16'>{orderItems.price}</td>
+                <td className='w-16'>{orderItems.description?orderItems.description:"no data"}</td></tr>
+              
+              ))}</td>
                     <td className="text-center">{data.deliveryInstruction?data.deliveryInstruction:"no data"}</td>
 
             <td className="text-center">{data.otp}</td>
@@ -314,10 +335,36 @@ const handleSaveStatus = async (orderId) => {
         <td className='text-center  whitespace-nowrap px-2'>{data.longitude}</td>
             <td className="text-center">{data.riderDetails.name}</td>
             <td className="text-center">{data.riderDetails.number}</td>
+                  <td className="text-center whitespace-nowrap">{data.createdAt?data.createdAt.split("T")[1].split(".")[0]:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.updatedAt?data.updatedAt.split("T")[1].split(".")[0]:"-"}</td>
           </tr>
         ))}
       </tbody>
     </table>
+)}
+    <div className="flex justify-center gap-4 mt-4">
+
+  <button
+    disabled={page === 0 || loading}
+    onClick={() => setPage((prev) => prev - 1)}
+    className="px-4 py-2 bg-gray-300 rounded"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {page + 1} of {totalPages}
+  </span>
+
+  <button
+    disabled={page >= totalPages - 1 || loading}
+    onClick={() => setPage((prev) => prev + 1)}
+    className="px-4 py-2 bg-gray-300 rounded"
+  >
+    Next
+  </button>
+
+</div>
   </div>
 </div>
 )

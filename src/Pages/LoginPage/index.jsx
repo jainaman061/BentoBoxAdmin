@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom'
 // import { useAppContext } from '../utils/AppProvider';
 import { ErrorMessage, Field, Formik ,Form} from 'formik';
 import * as Yup from "yup";
+import apiClient from '../../utils/apiclient';
 const Login = () => {
 
     const localurlsend = "http://localhost:8080/api/otp/send"
     const localurlverify = "http://localhost:8080/api/otp/verify"
-    const liveurlsend="https://clone-backend.getbentobox.in/api/otp/send"
-    const liveurlverify="https://clone-backend.getbentobox.in/api/otp/verify"
+    const liveurlsend="https://backend.getbentobox.in/api/otp/send"
+    const liveurlverify="https://backend.getbentobox.in/api/otp/verify"
 
     const navigate = useNavigate();
 
@@ -17,6 +18,7 @@ const Login = () => {
 
  
     const [step,setStep]=useState("enter_number");
+    const [selectedRole, setSelectedRole] = useState("admin");
     const [phone,setPhone]=useState("");
     const [requestResponse,setrequestResponse]=useState({
         message:"",
@@ -28,47 +30,68 @@ const Login = () => {
     }
   },[] );
 
-   const sendOtp=(values)=>{
-    const {number} = values;
-    axios
-    .post(liveurlsend,{
-        number:number,
-        role:"admin"
-    })
-    .then((res)=>{
-        setPhone(number)
-         setrequestResponse({ message: "OTP sent successfully", className: "bg-green-100 text-green-800 px-4 py-2 rounded-md shadow" });
-    setStep("enter_otp");
-    })
-    .catch((err)=>{
-        console.log(err)
-        setrequestResponse({message:"Failed To send OTP",className:"bg-red-100 text-red-800 px-4 py-2 rounded-md shadow"});
-    })
+  const sendOtp = (values) => {
+  const { number, role } = values;
 
-   };
+  axios
+    .post(liveurlsend, {
+      number,
+      role,
+    })
+    .then((res) => {
+      setPhone(number);
+      setSelectedRole(role); // we'll add this below
+      setrequestResponse({
+        message: "OTP sent successfully",
+        className: "bg-green-100 text-green-800 px-4 py-2 rounded-md shadow",
+      });
+      setStep("enter_otp");
+    })
+    .catch((err) => {
+      setrequestResponse({
+        message: "Failed To send OTP",
+        className: "bg-red-100 text-red-800 px-4 py-2 rounded-md shadow",
+      });
+    });
+};
    
-   const verifyOtp=(values)=>{
-    const {otp} = values;
-    axios.post(liveurlverify,{
-        number: phone,
-        otp:otp,
-        role:"admin"
-    })
-    .then((res)=>{
-        localStorage.setItem("bentoAdmin",res.data);
-        const now=new Date();
-    
-        localStorage.setItem("bentoAdminExpiry",now.getTime());
-        
-        setrequestResponse({ message: "Logged in successfully", className: "bg-green-100 text-green-800 px-4 py-2 rounded-md shadow" });
-        navigate(`/`);
+   const verifyOtp = async (values) => {
+  try {
+    const { otp } = values;
 
-    })
-    .catch((err)=>{
-                setrequestResponse({ message: "Invalid OTP", className: "bg-red-100 text-red-800 px-4 py-2 rounded-md shadow" });
+    const res = await axios.post(liveurlverify, {
+      number: phone,
+      otp,
+      role: selectedRole,
+    });
 
-    })
-   }
+    localStorage.setItem("bentoAdmin", res.data);
+
+    const now = new Date();
+    localStorage.setItem("bentoAdminExpiry", now.getTime());
+
+    setrequestResponse({
+      message: "Logged in successfully",
+      className: "bg-green-100 text-green-800 px-4 py-2 rounded-md shadow",
+    });
+
+    const response = await apiClient.get("/user");
+
+    console.log(response.data.role.id);
+
+    localStorage.setItem(
+      "bentoAdminDetails",
+      JSON.stringify(response.data.role.id)
+    );
+
+    navigate("/");
+  } catch (err) {
+    setrequestResponse({
+      message: "Invalid OTP",
+      className: "bg-red-100 text-red-800 px-4 py-2 rounded-md shadow",
+    });
+  }
+};
    
     const firstOtpRef = React.useRef(null);
    useEffect(() => {
@@ -101,14 +124,18 @@ const Login = () => {
              <h2 className="text-xl font-bold mb-4 text-center">Login via Mobile</h2>
              <hr className="mb-6  border-black" />
              {step==="enter_number" ? (
+              
                 <Formik 
                     key="enter_number"
-                initialValues={{number:""}}
+                initialValues={{number:"",
+                  role:"admin",
+                }}
                     onSubmit={sendOtp}
                     validationSchema={Yup.object({
                         number:Yup.string()
                         .required("Mobile number is Required")
                         .matches(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number"),
+                          role: Yup.string().required("Please select a role"),
 
                     })}>
                         {(formik)=>(
@@ -130,6 +157,26 @@ const Login = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
+                <div className="mb-4">
+  <label className="block mb-1 text-gray-700">
+    Select Role
+  </label>
+
+  <Field
+    as="select"
+    name="role"
+    className="w-full px-4 py-2 border border-black rounded-3xl bg-transparent"
+  >
+    <option value="admin">Admin</option>
+    <option value="support">Support</option>
+  </Field>
+
+  <ErrorMessage
+    name="role"
+    component="div"
+    className="text-red-500 text-sm mt-1"
+  />
+</div>
                 <button
                   type="submit"
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"

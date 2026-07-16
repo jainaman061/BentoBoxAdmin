@@ -62,7 +62,9 @@ const Index = (data) => {
     
    
   return (
-    <div className='flex flex-col text-center  items-center sm:w-screen '>{Tabletype}</div>
+    <div className='flex flex-col text-center  items-center sm:w-screen '>
+        {Tabletype}
+        </div>
   )
 }
 

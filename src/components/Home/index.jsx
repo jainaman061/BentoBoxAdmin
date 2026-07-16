@@ -10,7 +10,8 @@ const index = ({type}) => {
 </div>
       </div>
      <div className='flex flex-col md:justify-center p-2 '> 
-      <div className=' mt-6 flex justify-center items-center ml-2'><Table data={type}/> </div></div>
+      <div className=' mt-6 flex justify-center items-center ml-2'><Table data={type}/> </div>
+      </div>
     </div>
   )
 }

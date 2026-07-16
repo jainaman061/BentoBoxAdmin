@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import apiClient from "../../utils/apiclient";
 
 const Index = () => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
   const [Userid, setUserId] = useState("");
   const [Mealid, setMealId] = useState("");
 
@@ -46,6 +47,7 @@ const Index = () => {
 
   return (
     <div>
+      {(isAdmin) && (
       <form onSubmit={handleSubmit} style={{ maxWidth: "500px" }}>
         <h2 className="pb-2 text-center">Create Subscription</h2>
 
@@ -145,6 +147,7 @@ const Index = () => {
           Submit Subscription
         </button>
       </form>
+      )}
     </div>
   );
 };

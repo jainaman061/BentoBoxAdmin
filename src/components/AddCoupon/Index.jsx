@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../utils/apiclient";
 
 const Index = () => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
   const [data, setData] = useState([]);
   const [editRow, setEditRow] = useState(null);
   const [editedData, setEditedData] = useState({});
@@ -35,10 +36,16 @@ const Index = () => {
   const handleSave = async() => {
 
     try{
-       const payload = {
+   const payload = {
   name: editedData.name,
-  isvalid: editedData.isvalid === "true" || editedData.isvalid === true,
-  includeInDropdown: editedData.includeInDropdown || false,
+  isvalid:
+    editedData.isvalid === true ||
+    editedData.isvalid === "true",
+
+  includeInDropdown:
+    editedData.includeindropdown === true ||
+    editedData.includeindropdown === "true",
+
   maximumDiscount: Number(editedData.maximumDiscount),
   minimumOrderValue: Number(editedData.minimumOrderValue),
   discountPercentage: Number(editedData.discountPercentage),
@@ -70,8 +77,8 @@ const Index = () => {
   maximumDiscount: Number(newContainerData.maximumDiscount),
   minimumOrderValue: Number(newContainerData.minimumOrderValue),
   discountPercentage: Number(newContainerData.discountPercentage),
-  isvalid: newContainerData.isvalid || false,
-  includeInDropdown: newContainerData.includeInDropdown || false,
+  isvalid: newContainerData.isvalid === "true"?true:false,
+  includeInDropdown: newContainerData.includeInDropdown ==="true"?true:false,
 };
       // const formData =new FormData();
       // formData.append("name",newContainerData.name)
@@ -107,7 +114,9 @@ const Index = () => {
             <th className="px-5">maximumDiscount</th>
             <th className="px-5">minimumOrderValue</th>
             <th className="px-5">discountPercentage</th>
-            <th className="px-5">Edit</th>
+            {(isAdmin) && (
+              <th className="px-5">Edit</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -149,28 +158,29 @@ const Index = () => {
       </label>
 
       {/* includeInDropdown */}
-      <label>
-        <input
-          type="checkbox"
-         checked={
-  editedData.includeInDropdown === true ||
-  editedData.includeInDropdown === "true"
-}
-          onChange={(e) =>
-            setEditedData({
-              ...editedData,
-              includeInDropdown: e.target.checked,
-            })
-          }
-        />
-        <span className="ml-1">Include In Dropdown</span>
-      </label>
+      {/* includeInDropdown */}
+<label>
+  <input
+    type="checkbox"
+    checked={
+      editedData.includeindropdown === true ||
+      editedData.includeindropdown === "true"
+    }
+    onChange={(e) =>
+      setEditedData({
+        ...editedData,
+        includeindropdown: e.target.checked,
+      })
+    }
+  />
+  <span className="ml-1">Include In Dropdown</span>
+</label>
 
     </div>
   ) : (
     <>
-      {row.isvalid ? "ACTIVE" : "INACTIVE"} <br />
-      {row.includeInDropdown ? "IN DROPDOWN" : "NOT IN DROPDOWN"}
+      {row.isvalid? "ACTIVE" : "INACTIVE"} <br />
+      {row.includeindropdown  ? "IN DROPDOWN" : "NOT IN DROPDOWN"}
     </>
   )}
 </td>
@@ -208,7 +218,7 @@ const Index = () => {
               </td>
 
               
-
+                        {(isAdmin) && (      
               <td className="text-center">
                 {editRow === row.id ? (
                   <button
@@ -226,10 +236,13 @@ const Index = () => {
                   </button>
                 )}
               </td>
+          )}
             </tr>
           ))}
         </tbody>
       </table>
+  {(isAdmin) && (
+    <>
       <button className="bg-blue-500 text-white px-3 py-1 rounded justify-center text-center"
                   onClick={()=>SetnewConatiner(!newContainer)}>
                     Add new Coupon
@@ -299,7 +312,7 @@ const Index = () => {
     Add
   </button>
 
-</div>:""}
+</div>:""}</>)}
     </div>
   );
 };

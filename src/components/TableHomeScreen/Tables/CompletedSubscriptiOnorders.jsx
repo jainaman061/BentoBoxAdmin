@@ -5,33 +5,57 @@ import { useNavigate } from 'react-router-dom'
 
 const CompletedSubscriptiOnorders = (route) => {
   const navigate = useNavigate()
-        const [data,Setdata]=useState([])
  const [search,Setsearch]=useState("")
+const [data, Setdata] = useState([]);
+const [page, setPage] = useState(0);
+const [size] = useState(20);
+const [totalPages, setTotalPages] = useState(0);
+const [loading, setLoading] = useState(false);
+useEffect(() => {
+  fetchOrders();
+}, [page,search]);
 
-  useEffect(()=>{
-      const tableData=async()=>{
-        try{
-          const data=await apiClient.get( `${route.route}`);
-          console.log(data.data);
-          Setdata(data.data);
-          
-        }
-        catch(e){
-          console.error(e); 
-        }
-  
-      }
-tableData()    },[])
-const filteredData = data.filter((el) => {
-    if (search.trim() === "") {
-      return true; 
-    }
-    return (
-      el.name?.toLowerCase().includes(search.toLowerCase()) || 
-      el.number?.toString().includes(search) ||
-      el.email?.toLowerCase().includes(search.toLowerCase())
+const fetchOrders = async () => {
+  try {
+    setLoading(true);
+
+    const response = await apiClient.get(
+      `${route.route}?page=${page}&size=${size}&search=${search}`
     );
-  });
+
+    Setdata(response.data.content);
+    setTotalPages(response.data.totalPages);
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
+const filteredData = Array.isArray(data)
+  ? data.filter((el) => {
+      if (search.trim() === "") return true;
+
+      return (
+        el.number?.toString().includes(search) ||
+        el.userdetails?.name
+          ?.toLowerCase()
+          .includes(search.toLowerCase())||
+                el.email?.toLowerCase().includes(search.toLowerCase())
+
+      );
+    })
+  : [];
+// const filteredData = data.filter((el) => {
+//     if (search.trim() === "") {
+//       return true; 
+//     }
+//     return (
+//       el.name?.toLowerCase().includes(search.toLowerCase()) || 
+//       el.number?.toString().includes(search) ||
+//       el.email?.toLowerCase().includes(search.toLowerCase())
+//     );
+//   });
     const handlechange=(e)=>{
         const value=e.target.value;
         Setsearch(value);
@@ -41,6 +65,11 @@ const filteredData = data.filter((el) => {
             <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
 
     <div className="w-screen   overflow-x-auto overflow-y-auto overscroll-x-contain h-96 ">
+    {loading ? (
+<div className="absolute inset-0 bg-white/60 flex justify-center items-center z-10">
+      Loading...
+    </div>
+) : (
     <table className='border-4    border-gray-300 mt-8'>
       <thead>
       <tr>
@@ -70,12 +99,13 @@ const filteredData = data.filter((el) => {
         <th className='px-5'>Longitude</th>
         <th className="px-5 py-2">Rider name</th>
           <th className="px-5 py-2">Rider number</th>
-
+<th className="px-5 py-2 whitespace-nowrap">Created At</th>
+          <th className="px-5 py-2 whitespace-nowrap">Updated At</th>
 
       </tr>
       </thead><tbody>
         {
-          filteredData.map((data,index)=>(
+          data.map((data,index)=>(
         
             <tr key={index} className='items-center justify-center border border-gray-300'>
               <td className='text-center'>{data.id}</td>
@@ -102,10 +132,37 @@ const filteredData = data.filter((el) => {
         <td className='text-center px-2'>{data.longitude}</td>
               <td className="text-center">{data.riderDetails.name}</td>
             <td className="text-center">{data.riderDetails.number}</td>
+                  <td className="text-center whitespace-nowrap">{data.createdAt?data.createdAt.split("T")[1].split(".")[0]:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.updatedAt?data.updatedAt.split("T")[1].split(".")[0]:"-"}</td>
             </tr>
           ))
         }</tbody>
-     </table> </div>
+     </table> )}
+
+ </div>
+     <div className="flex justify-center gap-4 mt-4">
+
+  <button
+    disabled={page === 0 || loading}
+    onClick={() => setPage((prev) => prev - 1)}
+    className="px-4 py-2 bg-gray-300 rounded"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {page + 1} of {totalPages}
+  </span>
+
+  <button
+    disabled={page >= totalPages - 1 || loading}
+    onClick={() => setPage((prev) => prev + 1)}
+    className="px-4 py-2 bg-gray-300 rounded"
+  >
+    Next
+  </button>
+
+</div>
      </div>
   )
 }

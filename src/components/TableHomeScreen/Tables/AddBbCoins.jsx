@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import apiClient from '../../../utils/apiclient';
 
 const AddBbCoins = () => {
+const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
 
   const [formData, setFormData] = useState({
     user_id: '',
@@ -33,6 +34,8 @@ const AddBbCoins = () => {
   };
 
   return (
+    (isAdmin) && (
+    
     <form
       onSubmit={handleSubmit}
       className="flex flex-col items-center justify-center gap-6"
@@ -67,6 +70,8 @@ const AddBbCoins = () => {
         Add Coins
       </button>
     </form>
+    
+    )
   );
 };
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../utils/apiclient";
 
 const MealPlanForm = (id) => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
+
     console.log(id.id)
     const restaurantId=id.id;
   const [mealname, setMealName] = useState("");
@@ -104,7 +106,8 @@ useEffect(()=>{
 
   return (
     <div className="p-6 max-w-xl">
-
+{isAdmin && (
+  <>
       {/* Meal Name */}
       <input
         type="text"
@@ -148,6 +151,8 @@ useEffect(()=>{
       >
         Create Meal Plan
       </button>
+      </>
+      )}
     </div>
   );
 };

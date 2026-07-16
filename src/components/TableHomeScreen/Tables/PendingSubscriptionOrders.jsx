@@ -14,34 +14,46 @@ const PendingSubscriptionOrders = ({route}) => {
   "payment_initiated",
   "payment_cancelled"
 ];
+const [page, setPage] = useState(0);
+const [size] = useState(20);
+const [loading, setLoading] = useState(false);
+
+const [totalPages, setTotalPages] = useState(0);
 const [statusMap, setStatusMap] = useState({});
 
 
   const navigate=useNavigate();
-    const [data,Setdata]=useState([])
+    const [data,SetData]=useState([])
      const [search,Setsearch]=useState("")
 
+useEffect(() => {
+  fetchOrders();
+}, [page, search]);
 
-  useEffect(()=>{
-      const tableData=async()=>{
-        try{
-          const data=await apiClient.get( "/pendingSubscriptionorders");
-          console.log(data.data);
-          Setdata(data.data);
-          const  map = {};
-          data.data.forEach((o) => {
-          map [o.id] = o.status;
-          });
-          setStatusMap(map);
+const fetchOrders = async () => {
+  try {
+        setLoading(true);
 
-          
-        }
-        catch(e){
-          console.error(e); 
-        }
-  
-      }
-tableData()   },[])
+   const response = await apiClient.get(
+  `/pendingSubscriptionorders?page=${page}&size=${size}&search=${search}`
+);
+
+    SetData(response.data.content);
+    setTotalPages(response.data.totalPages);
+
+    const map = {};
+
+    response.data.content.forEach((o) => {
+      map[o.id] = o.status;
+    });
+
+    setStatusMap(map);
+  } catch (e) {
+    console.error(e);
+  }finally {
+    setLoading(false);
+  }
+};
 const handleStatusChange = (orderId, newStatus) => {
   setStatusMap((prev) => ({
     ...prev,
@@ -58,7 +70,7 @@ const handleSaveStatus = async (orderId) => {
     );
 
     // update table data locally
-    Setdata((prev) =>
+    SetData((prev) =>
       prev.map((order) =>
         order.id === orderId
           ? { ...order, status: newStatus }
@@ -75,9 +87,9 @@ const handleSaveStatus = async (orderId) => {
       return true; 
     }
     return (
-      el.name?.toLowerCase().includes(search.toLowerCase()) || 
-      el.number?.toString().includes(search) ||
-      el.email?.toLowerCase().includes(search.toLowerCase())
+      el.name?.toLowerCase().includes(search.toLowerCase()) || "-",
+      el.number?.toString().includes(search) || "-",
+      el.email?.toLowerCase().includes(search.toLowerCase()) || "-"
     );
   });
     const handlechange=(e)=>{
@@ -90,7 +102,11 @@ const handleSaveStatus = async (orderId) => {
         <input className='w-full md:w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
 
      <div className="w-screen   overflow-x-auto overflow-y-auto overscroll-x-contain  h-96">
-     <table className='border-4 border-gray-300 mt-8 min-w-max'>
+    {loading ? (
+<div className="absolute inset-0 bg-white/60 flex justify-center items-center z-10">
+      Loading...
+    </div>
+) : ( <table className='border-4 border-gray-300 mt-8 min-w-max'>
   <thead className="bg-gray-100">
     <tr>
       <th className='px-5 md:px-5 py-2 whitespace-nowrap'>SubscriptionOrder Id</th>
@@ -113,11 +129,14 @@ const handleSaveStatus = async (orderId) => {
       <th className="px-2 md:px-5 py-2 whitespace-nowrap text-xs md:text-sm">longitude</th>
       <th className="px-5 py-2 whitespace-nowrap">Rider name</th>
           <th className="px-5 py-2 whitespace-nowrap">Rider number</th>
+
+          <th className="px-5 py-2 whitespace-nowrap">Created At</th>
+          <th className="px-5 py-2 whitespace-nowrap">Updated At</th>
+
     </tr>
   </thead>
   <tbody>
-    {filteredData.map((data, index) => (
-      <tr key={index} className='border border-gray-300 hover:bg-gray-50'>
+{data.map((data, index) => (      <tr key={index} className='border border-gray-300 hover:bg-gray-50'>
         <td className='text-center whitespace-nowrap'>{data.id}</td>
         <td className='text-center px-2 whitespace-nowrap'>{data.publicId}</td>
         <td 
@@ -126,7 +145,7 @@ const handleSaveStatus = async (orderId) => {
         >
           {data.number}
         </td>
-        <td className='text-center whitespace-nowrap'>{data.userdetails?.name}</td>
+        <td className='text-center whitespace-nowrap'>{data.userdetails?.name?data.userdetails?.name:"-"}</td>
         <td className='text-center whitespace-nowrap'>{data.mealName}</td>
         <td className='text-center whitespace-nowrap'>{data.subscriptionOrderInstruction?data.subscriptionOrderInstruction:"no data"}</td>
         <td className='text-center whitespace-nowrap'>{data.otp}</td>
@@ -172,13 +191,40 @@ const handleSaveStatus = async (orderId) => {
         <td className='text-center whitespace-nowrap '>{data.street}</td>
         <td className='text-center  whitespace-nowrap px-2'>{data.latitude}</td>
         <td className='text-center  whitespace-nowrap px-2'>{data.longitude}</td>
-        <td className="text-center whitespace-nowrap">{data.riderDetails.name}</td>
-            <td className="text-center whitespace-nowrap">{data.riderDetails.number}</td>
+        <td className="text-center whitespace-nowrap">{data.riderDetails?.name?data.riderDetails.name:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.riderDetails?.number?data.riderDetails.number:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.createdAt?data.createdAt.split("T")[1].split(".")[0]:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.updatedAt?data.updatedAt.split("T")[1].split(".")[0]:"-"}</td>
       </tr>
     ))}
   </tbody>
 </table>
+)}
+
  </div>
+ <div className="flex justify-center items-center gap-4 mt-4">
+
+  <button
+    disabled={page === 0}
+    onClick={() => setPage((prev) => prev - 1)}
+    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {page + 1} of {totalPages}
+  </span>
+
+  <button
+    disabled={page >= totalPages - 1}
+    onClick={() => setPage((prev) => prev + 1)}
+    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+
+</div>
    </div>
   )
 }

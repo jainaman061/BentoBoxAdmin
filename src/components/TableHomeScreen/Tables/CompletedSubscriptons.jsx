@@ -4,6 +4,8 @@ import apiClient from '../../../utils/apiclient';
 import { useNavigate } from 'react-router-dom';
 
 const CompletedSubscriptons = (route) => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
+
    const [editingId, setEditingId] = useState(null);
   const [editDates, setEditDates] = useState({
     startdate: "",
@@ -116,9 +118,9 @@ const handleSave = async (subscriptionId) => {
                 <th className='px-5'>refund amount</th>
                 <th className='px-5'>admin notes</th>
                
-          
+        {(isAdmin) && (  
 <th className="px-5">Action</th>
-
+        )}
 
 
 
@@ -184,7 +186,7 @@ const handleSave = async (subscriptionId) => {
 
 <td className="text-center">{data.nonDiscountedPrice}</td>
         <td className="text-center">{data.price}</td>
-        <td className="text-center">{data.coinsused}</td>
+        <td className="text-center">{data.coinsUsed}</td>
         <td className="text-center">{data.discountvalue}</td>              <td className='text-center'>{data.refundAmount===null?"-":data.refundAmount}</td>
         <td className="text-center">
   {editingId === data.id ? (
@@ -198,6 +200,7 @@ const handleSave = async (subscriptionId) => {
     data.noteByAdmin || "-"
   )}
 </td>
+{(isAdmin) && (
 <td className="text-center">
   {editingId === data.id ? (
     <>
@@ -223,6 +226,7 @@ const handleSave = async (subscriptionId) => {
     </button>
   )}
 </td>
+)}
             </tr>
           ))
         

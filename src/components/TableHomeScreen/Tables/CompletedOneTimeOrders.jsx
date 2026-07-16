@@ -1,9 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import apiClient from "../../../utils/apiclient";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 
 const CompletedOneTimeOrders = (route) => {
+  const [Data, setData] = useState([]);
+const [page, setPage] = useState(0);
+const [size] = useState(20);
+const [totalPages, setTotalPages] = useState(0);
+const [loading, setLoading] = useState(false);
   const ORDER_STATUSES = [
   "ordered",
   "delivered",
@@ -16,36 +21,51 @@ const CompletedOneTimeOrders = (route) => {
   "delivered_Refunded",
 
 ];
-  const [Data, setData] = useState([]);
-  const [data,Setdata]=useState([])
   const navigate =useNavigate();
  const [search,Setsearch]=useState("")
 const [statusMap, setStatusMap] = useState({});
 const [refundMap, setRefundMap] = useState({});
 
   useEffect(() => {
-    
-    const tableData = async () => {
-      try {
-        const response = await apiClient.get(
- `${route.route}`        );
- const map = {};
-response.data.forEach((o) => {
-  map[o.id] = {
-    coins: o.refundedCoins || 0,
-    cash: o.refundedCash || 0,
-  };
-});
-setRefundMap(map);
-        setData(response.data);
-        console.log(response.data);
-        
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    tableData();
-  }, []);
+  fetchOrders();
+}, [page, search]);
+
+const fetchOrders = async () => {
+  try {
+    setLoading(true);
+
+    const response = await apiClient.get(
+  `${route.route}?page=${page}&size=${size}&search=${search}`
+);
+
+    const pageData = response.data.content;
+
+    setData(pageData);
+    setTotalPages(response.data.totalPages);
+
+    const map = {};
+    pageData.forEach((o) => {
+      map[o.id] = {
+        coins: o.refundedCoins || 0,
+        cash: o.refundedCash || 0,
+      };
+    });
+
+    const statusInitMap = {};
+    pageData.forEach((o) => {
+      statusInitMap[o.id] = o.orderStatus;
+    });
+
+    setStatusMap(statusInitMap);
+    console.log("statusInitMap Map:", statusInitMap);
+    setRefundMap(map);
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
   const handleRefundChange = (orderId, field, value) => {
   setRefundMap((prev) => ({
     ...prev,
@@ -104,11 +124,22 @@ const filteredData = Data.filter((el) => {
         Setsearch(value);
         console.log(value)
     }
+    console.log("Data:", Data);
+console.log("Length:", Data.length);
   return (
     <div>
               <input className='w-1/3 border-2 px-2' placeholder='search number here' onChange={handlechange}  value={search}/>
 
     <div className="w-screen   overflow-x-auto overflow-y-auto overscroll-x-contain max-h-96  pb-4">
+
+  {loading && (
+    <div className="absolute inset-0 bg-white/70 flex justify-center items-center z-10">
+      <div className="text-lg font-semibold">
+        Loading...
+      </div>
+    </div>
+  )}{
+
 <table className="border-4 border-gray-300 mt-8 w-full">
   <thead>
     <tr>
@@ -132,13 +163,17 @@ const filteredData = Data.filter((el) => {
       <th className="px-5">Order Date</th>
        <th className='px-5'>Start Time</th>
         <th className='px-5'>End Time</th>
+                  <th className="px-18 py-2">Order Items <br/><span className='p-2'> name </span><span className='p-2'> count </span><span className='p-2'> price </span><span className='p-2'> description </span></th>
+
       <th className="px-5 py-2">Rider name</th>
           <th className="px-5 py-2">Rider number</th>
+          <th className="px-5 py-2 whitespace-nowrap">Created At</th>
+          <th className="px-5 py-2 whitespace-nowrap">Updated At</th>
     </tr>
   </thead>
 
   <tbody>
-    {filteredData.map((data, index) => (
+    {Data.map((data, index) => (
       <tr key={index} className="items-center justify-center border border-gray-300">
         <td className="text-center">{data.id}</td>
                 <td className='text-center px-2'>{data.publicId}</td>
@@ -163,58 +198,64 @@ const filteredData = Data.filter((el) => {
         <td className="text-center">{data.coinsused}</td>
         <td className="text-center">{data.discountvalue}</td>
 <td className="text-center">
-  <div className="flex flex-col items-center gap-2">
+  {(() => {
+    const currentStatus = statusMap[data.id] ?? data.orderStatus;
 
-    <div className="flex items-center gap-2">
-      <select
-        className="border rounded px-2 py-1"
-        value={statusMap[data.id] ?? data.orderStatus}
-        onChange={(e) => handleStatusChange(data.id, e.target.value)}
-      >
-        {ORDER_STATUSES.map((status) => (
-          <option key={status} value={status}>
-            {status.replace(/_/g, " ").toUpperCase()}
-          </option>
-        ))}
-      </select>
+    console.log("Current Status:", data.id, currentStatus);
 
-      {statusMap[data.id] !== data.orderStatus && (
-        <button
-          onClick={() => handleSaveStatus(data.id)}
-          className="bg-green-600 text-white px-2 py-1 rounded text-sm"
+    return (
+      <>
+        <select
+          className="border rounded px-2 py-1"
+          value={currentStatus}
+          onChange={(e) =>
+            handleStatusChange(data.id, e.target.value)
+          }
         >
-          Save
-        </button>
-      )}
-    </div>
+          {ORDER_STATUSES.map((status) => (
+            <option key={status} value={status}>
+              {status.replace(/_/g, " ").toUpperCase()}
+            </option>
+          ))}
+        </select>
 
-    {/* 🔥 SHOW ONLY FOR REFUND */}
-    {(statusMap[data.id] === "Refunded" ||
-      statusMap[data.id] === "delivered_Refunded") && (
-      <div className="flex gap-2">
-        <input
-          type="number"
-          placeholder="Coins"
-          className="border px-2 py-1 rounded w-20"
-          value={refundMap[data.id]?.coins || ""}
-          onChange={(e) =>
-            handleRefundChange(data.id, "coins", e.target.value)
-          }
-        />
+        {currentStatus !== data.orderStatus && (
+          <button
+            onClick={() => handleSaveStatus(data.id)}
+            className="bg-green-600 text-white px-2 py-1 rounded text-sm mt-2"
+          >
+            Save
+          </button>
+        )}
 
-        <input
-          type="number"
-          placeholder="Cash"
-          className="border px-2 py-1 rounded w-20"
-          value={refundMap[data.id]?.cash || ""}
-          onChange={(e) =>
-            handleRefundChange(data.id, "cash", e.target.value)
-          }
-        />
-      </div>
-    )}
-  </div>
-</td>     
+        {(currentStatus === "Refunded" ||
+          currentStatus === "delivered_Refunded") && (
+          <div className="flex gap-2 mt-2">
+            <input
+              type="number"
+              placeholder="Coins"
+              className="border px-2 py-1 rounded w-20"
+              value={refundMap[data.id]?.coins || ""}
+              onChange={(e) =>
+                handleRefundChange(data.id, "coins", e.target.value)
+              }
+            />
+
+            <input
+              type="number"
+              placeholder="Cash"
+              className="border px-2 py-1 rounded w-20"
+              value={refundMap[data.id]?.cash || ""}
+              onChange={(e) =>
+                handleRefundChange(data.id, "cash", e.target.value)
+              }
+            />
+          </div>
+        )}
+      </>
+    );
+  })()}
+</td>
   <td
           className="text-center hover:text-blue-900 text-lg hover:cursor-pointer hover:underline"
           onClick={() => navigate(`/userDetails/${data.number}`)}
@@ -232,14 +273,46 @@ const filteredData = Data.filter((el) => {
         <td className="text-center">{data.orderdate}</td>
          <td className='text-center'>{data.startTime}</td>
               <td className='text-center'>{data.endTime}</td>
+              <td  className='flex flex-col justify-center text-center items-center'>{data.orderItems.map((orderItems,idx)=>(
+                <tr key={idx} className='flex '><td className='w-20'>{orderItems.name}</td>
+                <td className='w-20'>{orderItems.count}</td>
+                <td className='w-16'>{orderItems.price}</td>
+                <td className='w-16'>{orderItems.description?orderItems.description:"no data"}</td></tr>
+              
+              ))}</td>
         <td className="text-center">{data.riderDetails.name}</td>
             <td className="text-center">{data.riderDetails.number}</td>
+                  <td className="text-center whitespace-nowrap">{data.createdAt?data.createdAt.split("T")[1].split(".")[0]:"-"}</td>
+            <td className="text-center whitespace-nowrap">{data.updatedAt?data.updatedAt.split("T")[1].split(".")[0]:"-"}</td>
       </tr>
     ))}
   </tbody>
 </table>
+}
 
- </div>  </div>);
+ </div>  <div className="flex justify-center items-center gap-4 mt-4">
+
+  <button
+    disabled={page === 0 || loading}
+    onClick={() => setPage((prev) => prev - 1)}
+    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {page + 1} of {totalPages}
+  </span>
+
+  <button
+    disabled={page >= totalPages - 1 || loading}
+    onClick={() => setPage((prev) => prev + 1)}
+    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+
+</div></div>);
 };
 
 export default CompletedOneTimeOrders;

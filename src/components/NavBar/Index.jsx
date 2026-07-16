@@ -135,6 +135,21 @@ const Index = () => {
                         SetSidepanel(!sidepanel)
 
           }}>AddBbCoins</a></li>
+             <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/Customdashboard')
+                        SetSidepanel(!sidepanel)
+
+          }}>Custom Dashboard</a></li>
+             <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/bulk-orders')
+                        SetSidepanel(!sidepanel)
+
+          }}>Bulk Orders</a></li>
+             <li> <a className='text-black text-md mt-2 hover:text-blue-900 text-lg hover:cursor-pointer hover:underline' onClick={()=>{
+            navigate('/batches')
+                        SetSidepanel(!sidepanel)
+
+          }}>Batches</a></li>
         
 
         </ol>  

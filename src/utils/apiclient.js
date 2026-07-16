@@ -1,14 +1,15 @@
 import axios from 'axios'
+import { LiaVenusMarsSolid } from 'react-icons/lia';
 //    baseURL: "https://bento-backend-849680057939.asia-south2.run.app/admin/",
 
 // https://bento-backend-version2-849680057939.asia-south2.run.app/admin/
     // baseURL: "http://localhost:8080/admin/",
     //https://backend.getbentobox.in/admin/
     const localurl = "http://localhost:8080/admin/"
-    const liveurl = "https://clone-backend.getbentobox.in/admin/"
+    const liveurl = "https://backend.getbentobox.in/admin/"
     console.log("CLONE BUILD V2 🚀");
 const apiClient = axios.create({
-       baseURL:localurl,
+       baseURL:liveurl,
     headers:{
         "Access-Control-Allow-Origin":"*",
         "Content-type":"application/json; charset=UTF-8"

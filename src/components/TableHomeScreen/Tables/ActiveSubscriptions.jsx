@@ -4,6 +4,8 @@ import apiClient from '../../../utils/apiclient';
 import { useNavigate } from 'react-router-dom';
 
 const ActiveSubscriptions = (route) => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
+
   const [editingId, setEditingId] = useState(null);
   
 const [editDates, setEditDates] = useState({
@@ -20,6 +22,8 @@ const handleEdit = (row) => {
     enddate: row.enddate,
     expirydate: row.expirydate,
     noteByAdmin: row.noteByAdmin || "",
+    maxmealcount: row.maxmealcount || "",
+
   });
 };
 
@@ -163,8 +167,9 @@ setCount(res.data);
           <th className='px-5'>name</th>
         <th className='px-5'>number</th>
 
-
-<th className="px-5">Action</th>
+              {(isAdmin) && (
+                <th className="px-5">Action</th>
+              )}
 
 
 
@@ -221,11 +226,21 @@ setCount(res.data);
 </td>
  <td className='text-center'>{count[data.userid]?count[data.userid]:"null"}</td>
  <td className='text-center'>{data.mealcount}</td>
-  <td className='text-center'>
-    {editingId === data.id ? (<input type="number" name="maxmealcount" value={editDates.maxmealcount} onChange={handleDateChange} classname="border px-1"/>):(data.maxmealcount)}</td>
-              <td className='text-center'>{data.promoApplicable?"Applied":"Not Applied"}</td>
+  <td className="text-center">
+  {editingId === data.id ? (
+    <input
+      type="number"
+      name="maxmealcount"
+      value={editDates.maxmealcount}
+      onChange={handleDateChange}
+      className="border px-1 w-16 text-center mx-auto block"
+    />
+  ) : (
+    data.maxmealcount
+  )}
+</td>
+            <td className='text-center'>{data.promoApplicable?"Applied":"Not Applied"}</td>
               <td className='text-center'>{returnmealplantype(data.mealplantype)}</td>
-
               <td className='text-center'>{data.subscriptionStatus }</td>
               <td className='text-center'>{data.ispaused ? "tue":"false"}</td>
               <td className='text-center'>{(data.pause_start_date===null )? "-":`${data.pause_start_date}`} </td>
@@ -245,7 +260,7 @@ setCount(res.data);
 
 <td className="text-center">{data.nonDiscountedPrice}</td>
         <td className="text-center">{data.price}</td>
-        <td className="text-center">{data.coinsused}</td>
+        <td className="text-center">{data.coinsUsed}</td>
         <td className="text-center">{data.discountvalue}</td>    
 <td className="text-center">
   {editingId === data.id ? (
@@ -263,7 +278,8 @@ setCount(res.data);
               <td className='text-center'>{data.userdetails.name}</td>
               <td className='text-center'>{data.userdetails.number}</td>
 <td className="text-center">
-  {editingId === data.id ? (
+  {isAdmin && (
+  editingId === data.id ? (
     <>
       <button
         className="text-green-600 mr-2"
@@ -285,7 +301,8 @@ setCount(res.data);
     >
       Edit
     </button>
-  )}
+  )
+)}
 </td>
 
             </tr>

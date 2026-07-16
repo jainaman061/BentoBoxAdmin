@@ -12,6 +12,9 @@ import AddCoupon from "./Pages/Addcoupon/Index"
 import CreateOnetimeorder from "./Pages/CreateOneTimeOrder/Index"
 import CreateSubscription from "./Pages/CreateSubscription/Index"
 import RatingsPage from "./Pages/RatingsPage/Index"
+import Customdashboard from "./Pages/Customdashboard/index"
+import BulkOrders from "./Pages/Bulk-Orders/Index"
+import Batches from "./Pages/Batches/Index.jsx"
 const App = () => {
  
   return (
@@ -30,7 +33,9 @@ const App = () => {
 <Route path="/ratings/orders" element={<RatingsPage />} />
 <Route path="/onetimeorder/create" element={<CreateOnetimeorder/>} />
 <Route path="/subscription/create" element={<CreateSubscription/>} />
-
+<Route path="/Customdashboard" element={<Customdashboard/>} />
+<Route path="/bulk-orders" element={<BulkOrders/>} />
+<Route path="/batches" element={<Batches/>} />
 </Routes>
 </BrowserRouter>
   )

@@ -13,6 +13,8 @@ import RestaurantRatings from '../../components/Ratings/RestaurantRatings'
 import TimeSlots from '../../components/TimeSlots/Index'
 import MealPlan from '../../components/MealPLan/Index'
 import Highlights from '../../components/Highlights/Index'
+import MealVariablesPage from "../../components/MealVariables/Index";
+
 const   Index = () => {
   const navigate=useNavigate()
   useEffect(() => {
@@ -39,6 +41,9 @@ const   Index = () => {
         const fetchData=async()=>{
             try{
                 const menu = await apiClient.get (`/items/${id}`);
+                                SetMenu(menu.data);
+                console.log("dataffetched");
+
                 const orders = await apiClient.get (`/orders/${id}`);
                 const subscriptionsorders = await apiClient.get (`/subscriptionOrders/${id}`);
                 const subscriptions = await apiClient.get (`/subscriptions/${id}`);
@@ -47,7 +52,7 @@ const   Index = () => {
                 const restaurantdetails=await apiClient.get(`/restaurantInfo/${id}`)
                 const ratings=await apiClient.get(`/restaurant/rating/${id}`)
                 const timeslots=await apiClient.get(`/get/timeslot/${id}`)
-                SetMenu(menu.data);
+                
                 SetOrders(orders.data)
                 Setsubscriptionsorders(subscriptionsorders.data)
                 Setsubscriptions(subscriptions.data)
@@ -73,22 +78,22 @@ const   Index = () => {
        <div className='justify-between w-screen'>
         <Navbar />
        </div>
-    <div className='flex flex-col justify-center items-center text-center '>
-        <div className='flex gap-4 mb-6 justify-center items-center mt-6  '>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("menu")}}>Menu</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("orders")}}>Orders</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("Subscription orders")}}>Subscription orders</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("Subscriptions")}}>Subscriptions</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("SubscriptionHistory")}}>Subscriptions history</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("WeekMealsToday")}}>Week Meals Today</button>
-            <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("restaurantdetails")}}>Restaurant details</button>
-                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("restaurantratings")}}>Restaurant Rating</button>
-                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("timeslots")}}>Time Slots</button>
-                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("mealplan")}}>Meal Plans</button>
-                        <button className='border-2 px-4 bg-blue-400' onClick={()=>{SetactiveSession("highlights")}}>Highlights</button>
-
+    <div className='flex w-full flex-col justify-center items-center text-center'>
+        <div className='flex w-full flex-nowrap gap-4 mb-6 justify-start items-center mt-6 overflow-x-auto px-4 py-2 whitespace-nowrap'>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("menu")}}>Menu</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("orders")}}>Orders</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("Subscription orders")}}>Subscription orders</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("Subscriptions")}}>Subscriptions</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("SubscriptionHistory")}}>Subscriptions history</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("WeekMealsToday")}}>Week Meals Today</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("restaurantdetails")}}>Restaurant details</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("restaurantratings")}}>Restaurant Rating</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("timeslots")}}>Time Slots</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("mealplan")}}>Meal Plans</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("highlights")}}>Highlights</button>
+            <button className='border-2 px-4 bg-blue-400 min-w-max' onClick={()=>{SetactiveSession("mealvariables")}}>Meal Variables</button>
         </div>
-        </div>
+    </div>
 
         
         
@@ -111,6 +116,7 @@ const   Index = () => {
             {activeSession==="timeslots"&& <TimeSlots data={id} />}
             {activeSession==="mealplan"&& <MealPlan data={id} />}
             {activeSession==="highlights"&& <Highlights data={id} />}
+            {activeSession==="mealvariables"&& <MealVariablesPage data={id} />}
 
     
       

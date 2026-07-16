@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../utils/apiclient";
 
 const Index = () => {
+  const isAdmin = localStorage.getItem("bentoAdminDetails") == 4 ? true : false;
   const [data, setData] = useState([]);
   const [editRow, setEditRow] = useState(null);
   const [editedData, setEditedData] = useState({});
@@ -87,7 +88,9 @@ const Index = () => {
             <th className="px-5">Container Id</th>
             <th className="px-5">Container Name</th>
             <th className="px-5">Container Price</th>
+           { (isAdmin) && (
             <th className="px-5">Edit</th>
+           )}
           </tr>
         </thead>
         <tbody>
@@ -121,7 +124,7 @@ const Index = () => {
                   row.price
                 )}
               </td>
-
+{isAdmin && (
               <td className="text-center">
                 {editRow === row.id ? (
                   <button
@@ -139,14 +142,17 @@ const Index = () => {
                   </button>
                 )}
               </td>
+)}
             </tr>
           ))}
         </tbody>
       </table>
+      {(isAdmin) && (
       <button className="bg-blue-500 text-white px-3 py-1 rounded justify-center text-center"
                   onClick={()=>SetnewConatiner(!newContainer)}>
                     Add new Container
                   </button>
+  )}
                   {newContainer? <div className="mt-2">
                     <input
                     type="text"
